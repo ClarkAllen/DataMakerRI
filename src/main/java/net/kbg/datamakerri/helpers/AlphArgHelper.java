@@ -44,4 +44,5 @@ public class AlphArgHelper {
         Map<String, Integer> nameFormats = definitions.getNameFormatMap();
         return Optional.ofNullable(nameFormats.get(arg.toUpperCase()));
     }
+
 }

@@ -12,15 +12,16 @@
  *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *     See the License for the specific language governing permissions and
  *     limitations under the License.
+ *
+ *
  */
 
 package net.kbg.datamakerri.controllers;
 
-import net.kb.datamaker.alpha.AddressFactory;
 import net.kb.datamaker.alpha.Gender;
 import net.kbg.datamakerri.helpers.AlphArgHelper;
-import net.kbg.datamakerri.model.Address;
 import net.kbg.datamakerri.model.ErrorMsg;
+import net.kbg.datamakerri.model.GenderMod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,31 +30,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/v1/alph")
-public class AddressController {
+public class GenderController {
 
     @Autowired
-    private AlphArgHelper argHelper;
+    AlphArgHelper argHelper;
 
-    @GetMapping("/address")
-    public ResponseEntity makeAddress(@RequestParam String gender, @RequestParam String namefmt) {
-        Optional<Gender> opGen = argHelper.genderArg(gender);
-        Optional<Integer> opInt = argHelper.nameFormatArg(namefmt);
-        if (opGen.isEmpty() || opInt.isEmpty()) {
-            ErrorMsg errorMsg = new ErrorMsg("400", "Bad gender or name format argument");
+    @GetMapping("/gender")
+    public ResponseEntity makeGender(@RequestParam String type) {
+        if (argHelper.genderArg(type).isEmpty()) {
+            ErrorMsg errorMsg = new ErrorMsg("400", "Bad type argument");
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(errorMsg);
         }
-        Gender gen = argHelper.genderArg(gender).get();
-        int fmt = opInt.get();
-        String addr = AddressFactory.addressToPerson(gen, fmt);
-        Address rslt = new Address(addr);
+        Gender g = argHelper.genderArg(type).get();
+        GenderMod gender = new GenderMod(g.getGenderSymbol(), g.getGenderString());
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(rslt);
+                .body(gender);
     }
 }
