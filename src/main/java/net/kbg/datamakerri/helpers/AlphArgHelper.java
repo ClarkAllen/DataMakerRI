@@ -19,14 +19,21 @@
 package net.kbg.datamakerri.helpers;
 
 import net.kb.datamaker.alpha.Gender;
+import net.kb.datamaker.alpha.TextFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class AlphArgHelper {
+
+    private static final Logger log = LoggerFactory.getLogger(AlphArgHelper.class);
 
     @Autowired
     private Definitions definitions;
@@ -43,6 +50,21 @@ public class AlphArgHelper {
     public Optional<Integer> nameFormatArg(String arg) {
         Map<String, Integer> nameFormats = definitions.getNameFormatMap();
         return Optional.ofNullable(nameFormats.get(arg.toUpperCase()));
+    }
+
+    public Optional<Character> charFromStringList(List<String> list) {
+        char ch = ' ';
+        try {
+            List<String> chList = list.stream()
+                    .filter(c -> c.length() == 1)
+                    .collect(Collectors.toList());
+
+            ch = TextFactory.fromList(chList).charAt(0);
+        }
+        catch (Exception e) {
+            return Optional.empty();
+        }
+        return Optional.of(ch);
     }
 
 }

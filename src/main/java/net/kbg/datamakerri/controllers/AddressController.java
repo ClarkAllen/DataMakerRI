@@ -44,7 +44,7 @@ public class AddressController {
 
     @GetMapping("/address")
     public ResponseEntity makeAddress(@RequestParam String gender, @RequestParam String namefmt) {
-        log.info("address to person : gender=" + gender + ", namefmt=" + namefmt);
+        log.debug("address to person : gender=" + gender + ", namefmt=" + namefmt);
         Optional<Gender> opGen = argHelper.genderArg(gender);
         Optional<Integer> opInt = argHelper.nameFormatArg(namefmt);
         if (opGen.isEmpty() || opInt.isEmpty()) {
