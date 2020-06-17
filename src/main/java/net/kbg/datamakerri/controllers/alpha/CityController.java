@@ -12,14 +12,12 @@
  *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *     See the License for the specific language governing permissions and
  *     limitations under the License.
- *
- *
  */
 
-package net.kbg.datamakerri.controllers;
+package net.kbg.datamakerri.controllers.alpha;
 
-import net.kb.datamaker.alpha.Directionals;
-import net.kbg.datamakerri.model.Directional;
+import net.kb.datamaker.alpha.CityFactory;
+import net.kbg.datamakerri.model.City;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,14 +26,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1/alph")
-public class DirectionalController {
+public class CityController {
 
-    @GetMapping("/directional")
-    public ResponseEntity makeDirectional() {
-        Directionals dirs = Directionals.randomDirection();
-        Directional directional = new Directional(dirs.getAbbreviation(), dirs.getText());
+    @GetMapping("/city")
+    public ResponseEntity makeCity() {
+        City city = new City(CityFactory.cityName());
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(directional);
+                .body(city);
     }
+
 }

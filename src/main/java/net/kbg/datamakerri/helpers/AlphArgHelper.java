@@ -19,15 +19,15 @@
 package net.kbg.datamakerri.helpers;
 
 import net.kb.datamaker.alpha.Gender;
+import net.kb.datamaker.alpha.MoneySymbols;
 import net.kb.datamaker.alpha.TextFactory;
+import net.kbg.datamakerri.model.MoneySymbol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -65,6 +65,11 @@ public class AlphArgHelper {
             return Optional.empty();
         }
         return Optional.of(ch);
+    }
+
+    public Optional<MoneySymbol> getMoneySymbolByName(String name) {
+        Map<String, MoneySymbol> msm = definitions.getMoneySymbolsMap();
+        return Optional.ofNullable(msm.getOrDefault(name.toUpperCase(), null));
     }
 
 }

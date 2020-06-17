@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package net.kbg.datamakerri.controllers;
+package net.kbg.datamakerri.controllers.alpha;
 
 import net.kb.datamaker.alpha.LetterFactory;
 import net.kbg.datamakerri.helpers.AlphArgHelper;
@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/alph")

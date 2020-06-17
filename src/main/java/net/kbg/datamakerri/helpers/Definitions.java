@@ -18,6 +18,8 @@
 
 package net.kbg.datamakerri.helpers;
 
+import net.kb.datamaker.alpha.MoneySymbols;
+import net.kbg.datamakerri.model.MoneySymbol;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -27,10 +29,10 @@ import java.util.Map;
 @Component
 public class Definitions {
 
-    private Map<String, Integer> nameFormatMap;
+    private static final Map<String, Integer> nameFormatMap = new HashMap<>();
+    private static final Map<String, MoneySymbol> moneySymbolsMap = new HashMap<>();
 
-    public Definitions() {
-        nameFormatMap = new HashMap<>();
+    {
         nameFormatMap.put("FIRST_MI_LAST", 0);
         nameFormatMap.put("FIRST_MIDDLE_LAST", 1);
         nameFormatMap.put("FIRST_LAST", 2);
@@ -41,6 +43,14 @@ public class Definitions {
         nameFormatMap.put("LAST_FI_MI", 7);
         nameFormatMap.put("RANDOM_NAME_FORMAT", 8);
 
+        for (MoneySymbols item : MoneySymbols.values()) {
+            MoneySymbol ms = new MoneySymbol(item.getSymbol(), item.getAbbreviation(), item.getDescription());
+            moneySymbolsMap.put(item.name(), ms);
+        }
+    }
+
+    public Definitions() {
+
     }
 
 
@@ -48,5 +58,8 @@ public class Definitions {
         return Collections.unmodifiableMap(nameFormatMap);
     }
 
+    public Map<String, MoneySymbol> getMoneySymbolsMap() {
+        return Collections.unmodifiableMap(moneySymbolsMap);
+    }
 
 }

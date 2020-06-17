@@ -20,6 +20,7 @@ package net.kbg.datamakerri.helpers;
 
 import net.kb.datamaker.alpha.Gender;
 import net.kbg.datamakerri.DatamakerriApplication;
+import net.kbg.datamakerri.model.MoneySymbol;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -28,6 +29,9 @@ import org.springframework.web.context.WebApplicationContext;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.Optional;
+
+import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 @SpringBootTest(classes = DatamakerriApplication.class)
@@ -80,6 +84,22 @@ public class AlphArgHelperTest extends AbstractTestNGSpringContextTests {
     @Test
     public void testBadFormatArg() {
         assertTrue(argHelper.nameFormatArg("NOT_AN_OPTION").isEmpty());
+    }
+
+    @Test
+    public void getMoneySymbolByNameHappyPathTest() {
+        Optional<MoneySymbol> opMs = argHelper.getMoneySymbolByName("EURO");
+        assertTrue(opMs.isPresent());
+        System.out.println(opMs.get());
+
+        opMs = argHelper.getMoneySymbolByName("euro");
+        assertTrue(opMs.isPresent());
+    }
+
+    @Test
+    public void getMoneySymbolByNameBadArg() {
+        Optional<MoneySymbol> opMs = argHelper.getMoneySymbolByName("BLIVIT");
+        assertTrue(opMs.isEmpty());
     }
 
 }
