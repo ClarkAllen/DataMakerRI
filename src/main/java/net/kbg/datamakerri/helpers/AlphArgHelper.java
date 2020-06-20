@@ -72,4 +72,8 @@ public class AlphArgHelper {
         return Optional.ofNullable(msm.getOrDefault(name.toUpperCase(), null));
     }
 
+    public boolean hasContent(String arg) {
+        return arg != null && arg.trim().length() > 0;
+    }
+
 }

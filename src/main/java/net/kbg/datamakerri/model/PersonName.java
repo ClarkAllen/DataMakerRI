@@ -87,10 +87,10 @@ public class PersonName {
                 break;
             case 7:
                 name = NameFactory.lastCommaFiMi();        // 7
-                fields = name.split(", ");
+                fields = name.split(" ");
                 first = fields[1];
                 middle = fields[2];
-                last = fields[0];
+                last = fields[0].replaceAll(",", "");
                 break;
         }
     }
