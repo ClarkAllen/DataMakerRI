@@ -82,6 +82,23 @@ public class AlphArgHelperTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
+    public void testHappyPathFormatArgLowCase() {
+        assertTrue(0 == argHelper.nameFormatArg("first_mi_last").get());
+        assertTrue(1 == argHelper.nameFormatArg("first_middle_last").get());
+        assertTrue(2 == argHelper.nameFormatArg("first_last").get());
+        assertTrue(3 == argHelper.nameFormatArg("fi_last").get());
+        assertTrue(4 == argHelper.nameFormatArg("fi_mi_last").get());
+        assertTrue(5 == argHelper.nameFormatArg("last_first").get());
+        assertTrue(6 == argHelper.nameFormatArg("last_fi").get());
+        assertTrue(7 == argHelper.nameFormatArg("last_fi_mi").get());
+        for (int b = 0; b < 50; ++b) {
+            assertTrue(-1 < argHelper.nameFormatArg("random_name_format").get() &&
+                    9 > argHelper.nameFormatArg("random_name_format").get()
+            );
+        }
+    }
+
+    @Test
     public void testBadFormatArg() {
         assertTrue(argHelper.nameFormatArg("NOT_AN_OPTION").isEmpty());
     }

@@ -19,7 +19,6 @@
 package net.kbg.datamakerri.helpers;
 
 import net.kb.datamaker.alpha.Gender;
-import net.kb.datamaker.alpha.MoneySymbols;
 import net.kb.datamaker.alpha.TextFactory;
 import net.kbg.datamakerri.model.MoneySymbol;
 import org.slf4j.Logger;
@@ -27,7 +26,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component

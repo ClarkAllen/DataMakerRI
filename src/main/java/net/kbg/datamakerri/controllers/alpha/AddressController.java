@@ -19,6 +19,7 @@ package net.kbg.datamakerri.controllers.alpha;
 import net.kb.datamaker.alpha.AddressFactory;
 import net.kb.datamaker.alpha.Gender;
 import net.kbg.datamakerri.helpers.AlphArgHelper;
+import net.kbg.datamakerri.helpers.NameFormatProcessor;
 import net.kbg.datamakerri.model.Address;
 import net.kbg.datamakerri.model.ErrorMsg;
 import org.slf4j.Logger;
@@ -42,6 +43,9 @@ public class AddressController {
     @Autowired
     private AlphArgHelper argHelper;
 
+    @Autowired
+    NameFormatProcessor nameFormatProcessor;
+
     @GetMapping("/address")
     public ResponseEntity makeAddress(@RequestParam String gender, @RequestParam String namefmt) {
         log.debug("address to person : gender=" + gender + ", namefmt=" + namefmt);
@@ -56,6 +60,18 @@ public class AddressController {
         }
         Gender gen = argHelper.genderArg(gender).get();
         int fmt = opInt.get();
+
+        if (namefmt.toUpperCase().contains("FI_") || namefmt.toUpperCase().equals("LAST_FI")) {
+            Optional<Address> optAddr = nameFormatProcessor.processNameFormat(namefmt);
+            if (optAddr.isEmpty()) {
+                log.error("unable to get Address for spec " + namefmt);
+                throw new RuntimeException("Address processing error");
+            }
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(optAddr.get());
+        }
+
         String addr = AddressFactory.addressToPerson(gen, fmt);
         Address rslt = new Address(addr);
         return ResponseEntity
