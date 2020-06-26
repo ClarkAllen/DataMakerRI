@@ -29,10 +29,11 @@ import org.springframework.web.context.WebApplicationContext;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 @SpringBootTest(classes = DatamakerriApplication.class)
 public class AlphArgHelperTest extends AbstractTestNGSpringContextTests {
@@ -117,6 +118,42 @@ public class AlphArgHelperTest extends AbstractTestNGSpringContextTests {
     public void getMoneySymbolByNameBadArg() {
         Optional<MoneySymbol> opMs = argHelper.getMoneySymbolByName("BLIVIT");
         assertTrue(opMs.isEmpty());
+    }
+
+    @Test
+    public void getCharFromStringListHappyPath() {
+        List<String> list = Arrays.asList(new String[]{"a", "b",  "c",  "d",  "e", });
+        Optional<Character> optChar = argHelper.charFromStringList(list);
+        assertTrue(optChar.isPresent());
+        assertFalse(optChar.isEmpty());
+        System.out.println("char from list = " + optChar.get());
+    }
+
+    @Test
+    public void getCharFromStringListSomeBadEntries() {
+        List<String> list = Arrays.asList(new String[]{"a", "bb",  "c",  "dd",  "ee", });
+        Optional<Character> optChar = argHelper.charFromStringList(list);
+        assertTrue(optChar.isPresent());
+        assertFalse(optChar.isEmpty());
+        System.out.println("char from list = " + optChar.get());
+    }
+
+    @Test
+    public void getCharFromStringListOneGoodEntry() {
+        // two is the minimum in the input list.  Selecting froma list of 1 is pointless.
+        List<String> list = Arrays.asList(new String[]{"aa", "bb",  "c",  "dd",  "ee"});
+        Optional<Character> optChar = argHelper.charFromStringList(list);
+        assertFalse(optChar.isPresent());
+        assertTrue(optChar.isEmpty());
+    }
+
+    @Test
+    public void getCharFromStringEmptyList() {
+        // two is the minimum in the input list.  Selecting froma list of 1 is pointless.
+        List<String> list = Arrays.asList(new String[]{});
+        Optional<Character> optChar = argHelper.charFromStringList(list);
+        assertFalse(optChar.isPresent());
+        assertTrue(optChar.isEmpty());
     }
 
 }

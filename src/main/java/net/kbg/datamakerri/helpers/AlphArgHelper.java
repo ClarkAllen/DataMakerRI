@@ -60,7 +60,12 @@ public class AlphArgHelper {
                     .filter(c -> c.length() == 1)
                     .collect(Collectors.toList());
 
-            ch = TextFactory.fromList(chList).charAt(0);
+            if (list.size() < 2) {
+                return Optional.empty();
+            }
+
+            String s = TextFactory.fromList(chList);
+            ch = s.charAt(0);
         }
         catch (Exception e) {
             return Optional.empty();
