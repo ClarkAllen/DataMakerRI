@@ -40,7 +40,7 @@ public class NameController {
     @Autowired
     private AlphArgHelper argHelper;
 
-    @RequestMapping("/name")
+    @RequestMapping("/person")
     public ResponseEntity makeNameOfPerson(@RequestParam String gender, @RequestParam String namefmt) {
         Optional<Gender> optGen = argHelper.genderArg(gender);
         Optional<Integer> optInt = argHelper.nameFormatArg(namefmt);
@@ -56,4 +56,5 @@ public class NameController {
                 .status(HttpStatus.OK)
                 .body(name);
     }
+
 }
