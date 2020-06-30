@@ -53,6 +53,15 @@ public class AlphArgHelper {
         return Optional.ofNullable(nameFormats.get(arg.toUpperCase()));
     }
 
+    public Optional<String> stringFromFormatArg(int arg) {
+        Map<String, Integer> map = definitions.getNameFormatMap();
+        Map<Integer, String> mapInversed =
+                map.entrySet()
+                        .stream()
+                        .collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
+        return Optional.ofNullable(mapInversed.get(arg));
+    }
+
     public Optional<Character> charFromStringList(List<String> list) {
         char ch = ' ';
         try {

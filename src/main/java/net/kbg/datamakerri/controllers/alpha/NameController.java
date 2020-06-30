@@ -17,6 +17,7 @@
 package net.kbg.datamakerri.controllers.alpha;
 
 import net.kb.datamaker.alpha.Gender;
+import net.kb.datamaker.numbers.IntegerFactory;
 import net.kbg.datamakerri.helpers.AlphArgHelper;
 import net.kbg.datamakerri.model.ErrorMsg;
 import net.kbg.datamakerri.model.PersonName;
@@ -43,7 +44,20 @@ public class NameController {
     @RequestMapping("/person")
     public ResponseEntity makeNameOfPerson(@RequestParam String gender, @RequestParam String namefmt) {
         Optional<Gender> optGen = argHelper.genderArg(gender);
-        Optional<Integer> optInt = argHelper.nameFormatArg(namefmt);
+        Optional<Integer> optInt = Optional.empty();
+        String nameFormat = namefmt;
+
+        if (namefmt.equals("RANDOM_NAME_FORMAT")) {
+            int arg = IntegerFactory.randomNumberInRange(0, 7);
+            Optional<String> optStr = argHelper.stringFromFormatArg(arg);
+            if (optStr.isPresent()) {
+                optInt = Optional.of(Integer.valueOf(arg));
+                nameFormat = argHelper.stringFromFormatArg(optInt.get()).get();
+            }  // else return 400 below.
+        } else {
+            optInt = argHelper.nameFormatArg(namefmt);
+        }
+
         if (optGen.isEmpty() || optInt.isEmpty()) {
             log.error("400 : Bad gender or namefmt argument : gender=" + gender + "  namefmt=" + namefmt);
             ErrorMsg errorMsg = new ErrorMsg("400", "Bad gender or namefmt argument");
@@ -51,7 +65,7 @@ public class NameController {
                     .status(HttpStatus.BAD_REQUEST)
                     .body(errorMsg);
         }
-        PersonName name = new PersonName(optGen.get(), namefmt, optInt.get());
+        PersonName name = new PersonName(optGen.get(), nameFormat, optInt.get());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(name);
