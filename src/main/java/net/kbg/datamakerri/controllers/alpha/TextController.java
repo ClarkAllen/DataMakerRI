@@ -54,9 +54,9 @@ public class TextController {
 
     @GetMapping("/textoflength")
     public ResponseEntity makeText(@RequestParam int length) {
-        if (length < 1 || length > 1_024_000) {
+        if (length < 1 || length > 2048) {
             ErrorMsg errorMsg = new ErrorMsg("400",
-                    "Length must be more than zero and less than 1,024,000");
+                    "Length must be more than zero and less than 2,048");
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(errorMsg);
