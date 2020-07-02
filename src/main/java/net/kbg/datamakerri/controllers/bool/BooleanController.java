@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -31,9 +32,33 @@ public class BooleanController {
     @GetMapping("/boolean")
     public ResponseEntity makeRandomBoolean() {
         boolean rslt = BooleanFactory.makeRandomBoolean();
-        BooleanValue booleanValue = new BooleanValue(rslt ? 1 : 0, rslt, "" + rslt);
+        String strbool = rslt ? "True" : "False";
+        BooleanValue booleanValue = new BooleanValue(rslt ? 1 : 0, rslt, strbool);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(booleanValue);
     }
+
+    @GetMapping("/intbool")
+    public ResponseEntity makeIntBoolean(@RequestParam int trueValue, @RequestParam int falseValue) {
+        int rslt = BooleanFactory.makeRandomBooleanIntFromArgs(trueValue, falseValue);
+        boolean bool = rslt == trueValue;
+        String strbool = rslt == trueValue ? "True" : "False";
+        BooleanValue booleanValue = new BooleanValue(rslt, bool, strbool);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(booleanValue);
+    }
+
+    @GetMapping("/strbool")
+    public ResponseEntity makeStringBoolean(@RequestParam String trueValue, @RequestParam String falseValue) {
+        String rslt = BooleanFactory.makeRandomBooleanStringFromArgs(trueValue, falseValue);
+        boolean bool = rslt.equals(trueValue);
+        int intbool = bool ? 1 : 0;
+        BooleanValue booleanValue = new BooleanValue(intbool, bool, rslt);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(booleanValue);
+    }
+
 }
