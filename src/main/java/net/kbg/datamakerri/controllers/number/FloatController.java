@@ -18,7 +18,9 @@ package net.kbg.datamakerri.controllers.number;
 
 import net.kbg.datamakerri.model.ErrorMsg;
 import net.kbg.datamakerri.model.NumberValue;
-import net.kbg.datamakerri.services.number.DoubleService;
+import net.kbg.datamakerri.services.number.FloatService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,19 +32,21 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/v1/num/double")
-public class DoubleController {
+@RequestMapping("/v1/num/float")
+public class FloatController {
+
+    private static final Logger log = LoggerFactory.getLogger(FloatController.class);
 
     @Autowired
-    DoubleService doubleService;
+    FloatService floatService;
 
-    @GetMapping("range")
-    public ResponseEntity makeDoubleInRange(@RequestParam long lowEnd, @RequestParam long highEnd) {
-        Optional<NumberValue> optRslt = doubleService.doubleInRange(lowEnd, highEnd);
+    @GetMapping("/range")
+    public ResponseEntity makeFloatInRange(@RequestParam int lowEnd, @RequestParam int highEnd) {
+        Optional<NumberValue> optNum = floatService.floatInRange(lowEnd, highEnd);
 
-        if (optRslt.isEmpty()) {
-            ErrorMsg errorMsg = new ErrorMsg(
-                    "400",
+        if (optNum.isEmpty()) {
+            log.error("Unable to get float in range.  Returning 400.");
+            ErrorMsg errorMsg = new ErrorMsg("400",
                     "Check your parameters.  The low end must be less than the high end.");
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -51,6 +55,6 @@ public class DoubleController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(optRslt.get());
+                .body(optNum.get());
     }
 }
