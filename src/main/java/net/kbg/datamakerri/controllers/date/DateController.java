@@ -20,6 +20,8 @@ package net.kbg.datamakerri.controllers.date;
 import net.kb.datamaker.dates.DateFactory;
 import net.kbg.datamakerri.model.DateValue;
 import net.kbg.datamakerri.model.ErrorMsg;
+import net.kbg.datamakerri.services.date.DateService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,65 +30,61 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/date")
 public class DateController {
 
+    @Autowired
+    DateService dateService;
+
     @GetMapping("/year")
     public ResponseEntity makeDateInYear(@RequestParam int year) {
-        if (year < 1 || year > 4_000) {
-            ErrorMsg errorMsg = new ErrorMsg("400", "The year parameter must be between 1 and 4000.");
+        Optional<DateValue> optVal = dateService.makeDateInYear(year);
+        if (optVal.isEmpty()) {
+            ErrorMsg errorMsg = new ErrorMsg("400", "The year must be between 1 and 4,000.");
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(errorMsg);
         }
 
-        Date dt = DateFactory.makeDateInYear(year);
-        String iso8601 = dt.toInstant().toString();
-        DateValue dateValue = new DateValue(iso8601, dt.getTime());
-
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(dateValue);
+                .body(optVal.get());
     }
 
     @GetMapping("/monthyear")
     public ResponseEntity makeDateInMonthYear(@RequestParam int month, @RequestParam int year) {
-        if (year < 1 || year > 4_000 || month < 1 || month > 12) {
-            ErrorMsg errorMsg = new ErrorMsg("400", "Bad parameter values");
+        Optional<DateValue> optVal = dateService.makeDateInMonthYear(month, year);
+        if (optVal.isEmpty()) {
+            ErrorMsg errorMsg = new ErrorMsg("400",
+                    "The month must be between 1 and 12 and the " +
+                            "year must be between 1 and 4,000.");
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(errorMsg);
         }
 
-        Date dt = DateFactory.dateInMonthYear(month - 1, year);
-        String iso8601 = dt.toInstant().toString();
-        DateValue dateValue = new DateValue(iso8601, dt.getTime());
-
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(dateValue);
+                .body(optVal.get());
     }
 
     @GetMapping("/range")
     public ResponseEntity makeDateInYearRange(@RequestParam int lowyear, @RequestParam int highyear) {
-        if (lowyear >= highyear  || lowyear < 1 || highyear > 4_000) {
-            ErrorMsg errorMsg = new ErrorMsg(
-                    "400",
-                    "Bad parameter values.  lowyear must be less then highyear and both values must be between 1 and 4,000");
+        Optional<DateValue> optVal = dateService.makeDateInYearRange(lowyear, highyear);
+        if (optVal.isEmpty()) {
+            ErrorMsg errorMsg = new ErrorMsg("400",
+                    "The year must be between 1 and 4,000.");
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(errorMsg);
         }
 
-        Date dt = DateFactory.makeDateInYearRange(lowyear, highyear);
-        String iso8601 = dt.toInstant().toString();
-        DateValue dateValue = new DateValue(iso8601, dt.getTime());
-
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(dateValue);
+                .body(optVal.get());
     }
 
 
