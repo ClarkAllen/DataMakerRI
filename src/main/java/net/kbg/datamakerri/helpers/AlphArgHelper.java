@@ -91,4 +91,8 @@ public class AlphArgHelper {
         return arg != null && arg.trim().length() > 0;
     }
 
+    public boolean noContent(String arg) {
+        return ! hasContent(arg);
+    }
+
 }

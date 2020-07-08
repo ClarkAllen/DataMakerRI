@@ -18,7 +18,7 @@ package net.kbg.datamakerri.model;
 
 public class BooleanValue {
     private int intValue;
-    private boolean booleanValue;
+    private boolean truth;
     private String stringValue;
 
     public BooleanValue() {
@@ -26,7 +26,7 @@ public class BooleanValue {
 
     public BooleanValue(int intValue, boolean booleanValue, String stringValue) {
         this.intValue = intValue;
-        this.booleanValue = booleanValue;
+        this.truth = booleanValue;
         this.stringValue = stringValue;
     }
 
@@ -38,12 +38,12 @@ public class BooleanValue {
         this.intValue = intValue;
     }
 
-    public boolean isBooleanValue() {
-        return booleanValue;
+    public boolean isTruth() {
+        return truth;
     }
 
-    public void setBooleanValue(boolean booleanValue) {
-        this.booleanValue = booleanValue;
+    public void setTruth(boolean truth) {
+        this.truth = truth;
     }
 
     public String getStringValue() {
@@ -58,7 +58,7 @@ public class BooleanValue {
     public String toString() {
         return "BooleanValue{" +
                 "intValue=" + intValue +
-                ", booleanValue=" + booleanValue +
+                ", booleanValue=" + truth +
                 ", stringValue='" + stringValue + '\'' +
                 '}';
     }

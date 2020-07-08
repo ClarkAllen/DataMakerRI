@@ -18,6 +18,9 @@ package net.kbg.datamakerri.controllers.bool;
 
 import net.kb.datamaker.bool.BooleanFactory;
 import net.kbg.datamakerri.model.BooleanValue;
+import net.kbg.datamakerri.model.ErrorMsg;
+import net.kbg.datamakerri.services.bool.BooleanService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,40 +28,52 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/v1/bool")
 public class BooleanController {
 
+    @Autowired
+    BooleanService booleanService;
+
     @GetMapping("/boolean")
     public ResponseEntity makeRandomBoolean() {
-        boolean rslt = BooleanFactory.makeRandomBoolean();
-        String strbool = rslt ? "True" : "False";
-        BooleanValue booleanValue = new BooleanValue(rslt ? 1 : 0, rslt, strbool);
+        BooleanValue bool = booleanService.makeRandomBoolean();
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(booleanValue);
+                .body(bool);
     }
 
     @GetMapping("/intbool")
     public ResponseEntity makeIntBoolean(@RequestParam int trueValue, @RequestParam int falseValue) {
-        int rslt = BooleanFactory.makeRandomBooleanIntFromArgs(trueValue, falseValue);
-        boolean bool = rslt == trueValue;
-        String strbool = rslt == trueValue ? "True" : "False";
-        BooleanValue booleanValue = new BooleanValue(rslt, bool, strbool);
+        Optional<BooleanValue> rslt = booleanService.makeIntBoolean(trueValue, falseValue);
+        if (rslt.isEmpty()) {
+            ErrorMsg errorMsg = new ErrorMsg("400",
+                    "Please check your arguments.");
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(errorMsg);
+        }
+
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(booleanValue);
+                .body(rslt.get());
     }
 
     @GetMapping("/strbool")
     public ResponseEntity makeStringBoolean(@RequestParam String trueValue, @RequestParam String falseValue) {
-        String rslt = BooleanFactory.makeRandomBooleanStringFromArgs(trueValue, falseValue);
-        boolean bool = rslt.equals(trueValue);
-        int intbool = bool ? 1 : 0;
-        BooleanValue booleanValue = new BooleanValue(intbool, bool, rslt);
+        Optional<BooleanValue> rslt = booleanService.makeStringBoolean(trueValue, falseValue);
+        if (rslt.isEmpty()) {
+            ErrorMsg errorMsg = new ErrorMsg("400",
+                    "Please check your arguments.");
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(errorMsg);
+        }
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(booleanValue);
+                .body(rslt.get());
     }
 
 }
