@@ -14,30 +14,29 @@
  *     limitations under the License.
  */
 
-package net.kbg.datamakerri.controllers.alpha;
+package net.kbg.datamakerri.services.alpha;
 
-import net.kb.datamaker.alpha.UspsSecondaryUnits;
+import net.kbg.datamakerri.DatamakerriApplication;
 import net.kbg.datamakerri.model.UspsSecondaryUnit;
-import net.kbg.datamakerri.services.alpha.UspsUnitService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.annotations.Test;
 
-@RestController
-@RequestMapping("/v1/alph")
-public class UspsUnitController {
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
+
+@SpringBootTest(classes = DatamakerriApplication.class)
+public class UspsUnitServiceTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
     UspsUnitService service;
 
-    @GetMapping("/uspsunit")
-    public ResponseEntity makeUspsUnit() {
-        UspsSecondaryUnit uspsUnit = service.makeUspsUnit();
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(uspsUnit);
+    @Test
+    public void testMakeUspsUnit() {
+        UspsSecondaryUnit unit = service.makeUspsUnit();
+        assertNotNull(unit);
+        assertTrue(unit.getShortText().length() > 0);
+        assertTrue(unit.getLongText().length() > 0);
     }
 }

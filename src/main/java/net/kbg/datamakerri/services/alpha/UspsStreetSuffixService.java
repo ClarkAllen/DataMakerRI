@@ -14,31 +14,24 @@
  *     limitations under the License.
  */
 
-package net.kbg.datamakerri.controllers.alpha;
+package net.kbg.datamakerri.services.alpha;
 
 import net.kb.datamaker.alpha.UspsStreetSuffixes;
 import net.kbg.datamakerri.model.UspsStreetSuffix;
-import net.kbg.datamakerri.services.alpha.UspsStreetSuffixService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
-@RestController
-@RequestMapping("/v1/alph")
-public class UspsStreetSuffixController {
+@Service
+public class UspsStreetSuffixService {
 
-    @Autowired
-    UspsStreetSuffixService service;
+    public UspsStreetSuffix makeUspsSuffix() {
+        UspsStreetSuffixes sfxs = UspsStreetSuffixes.streetSuffix();
+        UspsStreetSuffix suffix = new UspsStreetSuffix(
+                sfxs.getCommonSuffix(),
+                sfxs.getUspsStandardSuffix(),
+                sfxs.getMixedCaseName());
 
-    @GetMapping("/uspssuffix")
-    public ResponseEntity makeUspsSuffix() {
-        UspsStreetSuffix suffix = service.makeUspsSuffix();
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(suffix);
+        return suffix;
     }
-
 }

@@ -88,6 +88,7 @@ public class BooleanServiceTest extends AbstractTestNGSpringContextTests {
      */
 
     public void testMakeIntBooleanBadArgs() {
+        // if true and false are the same this is an error.
         int itrue = 10;
         int ifalse = 10;
         Optional<BooleanValue> optBool = booleanService.makeIntBoolean(itrue, ifalse);
@@ -95,6 +96,7 @@ public class BooleanServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     public void testMakeStringBooleanBadArgs() {
+        // if true and false are the same this is an error.
         String strT = "T";
         String strF = "T";
         Optional<BooleanValue> optBool = booleanService.makeStringBoolean(strT, strF);

@@ -19,19 +19,25 @@ package net.kbg.datamakerri.controllers.alpha;
 import net.kb.datamaker.alpha.TextFactory;
 import net.kbg.datamakerri.model.ErrorMsg;
 import net.kbg.datamakerri.model.TextResult;
+import net.kbg.datamakerri.services.alpha.TextService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/alph")
 public class TextController {
 
+    @Autowired
+    TextService textService;
+
     @GetMapping("/uuid")
     public ResponseEntity makeUuid() {
-        TextResult textResult = new TextResult(TextFactory.makeRandomUuid());
+        TextResult textResult = textService.makeUuid();
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(textResult);
@@ -39,33 +45,35 @@ public class TextController {
 
     @PutMapping("/fromlist")
     public ResponseEntity selectFromList(@RequestBody List<String> inputList) {
-        if (inputList.size() < 2) {
-            ErrorMsg errorMsg = new ErrorMsg("400", "Input list is too small");
+        Optional<TextResult> optTxt = textService.selectFromList(inputList);
+        if (optTxt.isEmpty()) {
+            ErrorMsg errorMsg = new ErrorMsg("400",
+                    "The list must have at least two elements.  " +
+                            "Please check your arguments");
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(errorMsg);
         }
-
-        TextResult textResult = new TextResult(TextFactory.fromList(inputList));
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(textResult);
+                .body(optTxt.get());
     }
 
     @GetMapping("/textoflength")
     public ResponseEntity makeText(@RequestParam int length) {
-        if (length < 1 || length > 2048) {
+        Optional<TextResult> optTxt = textService.makeText(length);
+
+        if (optTxt.isEmpty()) {
             ErrorMsg errorMsg = new ErrorMsg("400",
-                    "Length must be more than zero and less than 2,048");
+                    "The length argument must be between 1 and 2048.  " +
+                            "Please check your arguments.");
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(errorMsg);
         }
-
-        TextResult textResult = new TextResult(TextFactory.textOfLength(length));
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(textResult);
+                .body(optTxt.get());
     }
 
 }
