@@ -33,7 +33,7 @@ import static org.testng.Assert.assertTrue;
 public class AlphaNumServiceTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    AlphaNumService ans;
+    private AlphaNumService ans;
 
     /*
         Happy Path Tests

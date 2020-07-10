@@ -32,7 +32,7 @@ import static org.testng.Assert.assertTrue;
 public class DoubleServiceTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    DoubleService doubleService;
+    private DoubleService doubleService;
 
     /*
         Happy Path Tests

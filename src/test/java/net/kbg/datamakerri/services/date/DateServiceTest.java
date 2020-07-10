@@ -24,7 +24,6 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +33,7 @@ import static org.testng.Assert.*;
 public class DateServiceTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    DateService dateService;
+    private DateService dateService;
 
     /*
         Happy Path Tests

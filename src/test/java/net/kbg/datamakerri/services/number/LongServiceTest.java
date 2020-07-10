@@ -34,7 +34,7 @@ import static org.testng.Assert.*;
 public class LongServiceTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    LongService longService;
+    private LongService longService;
 
     /*
         Happy Path Tests

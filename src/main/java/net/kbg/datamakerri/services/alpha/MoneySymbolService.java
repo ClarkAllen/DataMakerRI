@@ -16,27 +16,31 @@
 
 package net.kbg.datamakerri.services.alpha;
 
-import net.kbg.datamakerri.DatamakerriApplication;
+import net.kb.datamaker.alpha.MoneySymbols;
 import net.kbg.datamakerri.helpers.AlphArgHelper;
-import net.kbg.datamakerri.model.Street;
+import net.kbg.datamakerri.model.MoneySymbol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.testng.annotations.Test;
+import org.springframework.stereotype.Service;
 
-import static org.testng.Assert.assertTrue;
+import java.util.Optional;
 
-@SpringBootTest(classes = DatamakerriApplication.class)
-public class StreetServiceTest extends AbstractTestNGSpringContextTests {
-    @Autowired
-    private StreetService service;
+@Service
+public class MoneySymbolService {
+
+    private static final Logger log = LoggerFactory.getLogger(MoneySymbolService.class);
 
     @Autowired
-    private AlphArgHelper argHelper;
+    AlphArgHelper argHelper;
 
-    @Test
-    public void testMakeStreet() {
-        Street street = service.makeStreet();
-        assertTrue(argHelper.hasContent(street.getStreet()));
+    public Optional<MoneySymbol> findMoneySymbolByName(String name) {
+        return argHelper.getMoneySymbolByName(name);
+    }
+
+    public MoneySymbol findRandomMoneySymbol() {
+        MoneySymbols mssyms = MoneySymbols.findRandomSymbol();
+        MoneySymbol ms = new MoneySymbol(mssyms.getSymbol(), mssyms.getAbbreviation(), mssyms.getDescription());
+        return ms;
     }
 }

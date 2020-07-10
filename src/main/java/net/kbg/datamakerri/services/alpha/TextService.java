@@ -17,7 +17,6 @@
 package net.kbg.datamakerri.services.alpha;
 
 import net.kb.datamaker.alpha.TextFactory;
-import net.kbg.datamakerri.model.ErrorMsg;
 import net.kbg.datamakerri.model.TextResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -34,7 +34,7 @@ public class FloatServiceTest extends AbstractTestNGSpringContextTests {
 
 
     @Autowired
-    FloatService floatService;
+    private FloatService floatService;
 
     /*
         Happy Path Tests

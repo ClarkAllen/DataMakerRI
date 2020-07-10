@@ -16,7 +16,6 @@
 
 package net.kbg.datamakerri.controllers.alpha;
 
-import net.kb.datamaker.alpha.States;
 import net.kbg.datamakerri.model.State;
 import net.kbg.datamakerri.services.alpha.StateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class StateController {
 
     @Autowired
-    StateService stateService;
+    private StateService stateService;
 
     @GetMapping("/state")
     public ResponseEntity makeState() {

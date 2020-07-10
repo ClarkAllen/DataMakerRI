@@ -31,7 +31,7 @@ import static org.testng.Assert.*;
 public class BooleanServiceTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    BooleanService booleanService;
+    private BooleanService booleanService;
 
     /*
         Happy Path Tests

@@ -50,7 +50,6 @@ public class Definitions {
     }
 
     public Definitions() {
-
     }
 
 

@@ -35,10 +35,10 @@ import static org.testng.Assert.assertTrue;
 public class NameServiceTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    NameService service;
+    private NameService service;
 
     @Autowired
-    AlphArgHelper argHelper;
+    private AlphArgHelper argHelper;
 
     /*
         Happy Path Tests

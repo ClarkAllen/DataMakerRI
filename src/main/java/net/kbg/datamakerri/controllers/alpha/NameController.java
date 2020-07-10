@@ -16,9 +16,6 @@
 
 package net.kbg.datamakerri.controllers.alpha;
 
-import net.kb.datamaker.alpha.Gender;
-import net.kb.datamaker.numbers.IntegerFactory;
-import net.kbg.datamakerri.helpers.AlphArgHelper;
 import net.kbg.datamakerri.model.ErrorMsg;
 import net.kbg.datamakerri.model.PersonName;
 import net.kbg.datamakerri.services.alpha.NameService;
@@ -40,9 +37,7 @@ public class NameController {
     private static final Logger log = LoggerFactory.getLogger(NameController.class);
 
     @Autowired
-    NameService nameService;
-    @Autowired
-    private AlphArgHelper argHelper;
+    private NameService nameService;
 
     @RequestMapping("/person")
     public ResponseEntity makeNameOfPerson(@RequestParam String gender, @RequestParam String namefmt) {

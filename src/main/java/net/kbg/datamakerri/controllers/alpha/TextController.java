@@ -16,7 +16,6 @@
 
 package net.kbg.datamakerri.controllers.alpha;
 
-import net.kb.datamaker.alpha.TextFactory;
 import net.kbg.datamakerri.model.ErrorMsg;
 import net.kbg.datamakerri.model.TextResult;
 import net.kbg.datamakerri.services.alpha.TextService;
@@ -33,7 +32,7 @@ import java.util.Optional;
 public class TextController {
 
     @Autowired
-    TextService textService;
+    private TextService textService;
 
     @GetMapping("/uuid")
     public ResponseEntity makeUuid() {

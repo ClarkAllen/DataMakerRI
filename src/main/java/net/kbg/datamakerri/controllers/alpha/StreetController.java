@@ -16,7 +16,6 @@
 
 package net.kbg.datamakerri.controllers.alpha;
 
-import net.kb.datamaker.alpha.StreetFactory;
 import net.kbg.datamakerri.model.Street;
 import net.kbg.datamakerri.services.alpha.StreetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class StreetController {
 
     @Autowired
-    StreetService streetService;
+    private StreetService streetService;
 
     @GetMapping("/street")
     public ResponseEntity makeStreet() {

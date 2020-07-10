@@ -44,7 +44,7 @@ public class AddressController {
     private AlphArgHelper argHelper;
 
     @Autowired
-    NameFormatProcessor nameFormatProcessor;
+    private NameFormatProcessor nameFormatProcessor;
 
     @GetMapping("/address")
     public ResponseEntity makeAddress(@RequestParam String gender, @RequestParam String namefmt) {

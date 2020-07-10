@@ -30,7 +30,7 @@ import static org.testng.Assert.assertTrue;
 public class UspsStreetSuffixTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    UspsStreetSuffixService service;
+    private UspsStreetSuffixService service;
 
     @Test
     public void testMakeStreetSuffix() {

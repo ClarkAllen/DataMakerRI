@@ -16,10 +16,10 @@
 
 package net.kbg.datamakerri.controllers.alpha;
 
-import net.kb.datamaker.alpha.MoneySymbols;
 import net.kbg.datamakerri.helpers.AlphArgHelper;
 import net.kbg.datamakerri.model.ErrorMsg;
 import net.kbg.datamakerri.model.MoneySymbol;
+import net.kbg.datamakerri.services.alpha.MoneySymbolService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +39,14 @@ public class MoneySymbolController {
     private static final Logger log = LoggerFactory.getLogger(MoneySymbolController.class);
 
     @Autowired
-    AlphArgHelper argHelper;
+    private MoneySymbolService service;
+
+    @Autowired
+    private AlphArgHelper argHelper;
 
     @GetMapping("/moneysym")
     public ResponseEntity makeMoneySymbol(@RequestParam String name) {
-        Optional<MoneySymbol> opMs = argHelper.getMoneySymbolByName(name);
+        Optional<MoneySymbol> opMs = service.findMoneySymbolByName(name);
         if (opMs.isEmpty()) {
             log.error("400 : Bad argument for money symbol name");
             ErrorMsg msg = new ErrorMsg("400", "Bad argument for money symbol name");
@@ -58,8 +61,7 @@ public class MoneySymbolController {
 
     @GetMapping("/moneysym/rand")
     public ResponseEntity makeRandomMoneySymbol() {
-        MoneySymbols mssyms = MoneySymbols.findRandomSymbol();
-        MoneySymbol ms = new MoneySymbol(mssyms.getSymbol(), mssyms.getAbbreviation(), mssyms.getDescription());
+        MoneySymbol ms = service.findRandomMoneySymbol();
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ms);

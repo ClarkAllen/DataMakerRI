@@ -16,7 +16,6 @@
 
 package net.kbg.datamakerri.controllers.alpha;
 
-import net.kb.datamaker.alpha.UspsSecondaryUnits;
 import net.kbg.datamakerri.model.UspsSecondaryUnit;
 import net.kbg.datamakerri.services.alpha.UspsUnitService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UspsUnitController {
 
     @Autowired
-    UspsUnitService service;
+    private UspsUnitService service;
 
     @GetMapping("/uspsunit")
     public ResponseEntity makeUspsUnit() {

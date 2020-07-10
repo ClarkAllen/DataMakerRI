@@ -30,10 +30,10 @@ import static org.testng.Assert.assertTrue;
 public class StateServiceTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    StateService service;
+    private StateService service;
 
     @Autowired
-    AlphArgHelper argHelper;
+    private AlphArgHelper argHelper;
 
     @Test
     public void testMakeState() {

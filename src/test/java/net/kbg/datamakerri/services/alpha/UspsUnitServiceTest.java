@@ -30,7 +30,7 @@ import static org.testng.Assert.assertTrue;
 public class UspsUnitServiceTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    UspsUnitService service;
+    private UspsUnitService service;
 
     @Test
     public void testMakeUspsUnit() {

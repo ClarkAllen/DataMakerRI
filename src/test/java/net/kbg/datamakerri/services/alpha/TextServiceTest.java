@@ -36,10 +36,10 @@ import static org.testng.Assert.assertTrue;
 public class TextServiceTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    TextService service;
+    private TextService service;
 
     @Autowired
-    AlphArgHelper argHelper;
+    private AlphArgHelper argHelper;
 
     /*
         Happy Path Tests

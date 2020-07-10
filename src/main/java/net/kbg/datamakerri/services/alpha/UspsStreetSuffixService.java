@@ -18,8 +18,6 @@ package net.kbg.datamakerri.services.alpha;
 
 import net.kb.datamaker.alpha.UspsStreetSuffixes;
 import net.kbg.datamakerri.model.UspsStreetSuffix;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service

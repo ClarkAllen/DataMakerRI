@@ -16,7 +16,6 @@
 
 package net.kbg.datamakerri.controllers.alpha;
 
-import net.kb.datamaker.alpha.UspsStreetSuffixes;
 import net.kbg.datamakerri.model.UspsStreetSuffix;
 import net.kbg.datamakerri.services.alpha.UspsStreetSuffixService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UspsStreetSuffixController {
 
     @Autowired
-    UspsStreetSuffixService service;
+    private UspsStreetSuffixService service;
 
     @GetMapping("/uspssuffix")
     public ResponseEntity makeUspsSuffix() {
