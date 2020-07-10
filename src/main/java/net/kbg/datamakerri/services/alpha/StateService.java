@@ -14,30 +14,22 @@
  *     limitations under the License.
  */
 
-package net.kbg.datamakerri.controllers.alpha;
+package net.kbg.datamakerri.services.alpha;
 
 import net.kb.datamaker.alpha.States;
 import net.kbg.datamakerri.model.State;
-import net.kbg.datamakerri.services.alpha.StateService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
-@RestController
-@RequestMapping("/v1/alph")
-public class StateController {
+@Service
+public class StateService {
 
-    @Autowired
-    StateService stateService;
-
-    @GetMapping("/state")
-    public ResponseEntity makeState() {
-        State state = stateService.makeState();
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(state);
+    public State makeState() {
+        States sts = States.randomState();
+        State state = new State(
+                sts.getName(), sts.getAbbreviation(), sts.getFipsCode(),
+                sts.getRegion(), sts.getRegionNumber(), sts.getDivision(),
+                sts.getDivisionNumber());
+        return state;
     }
 }

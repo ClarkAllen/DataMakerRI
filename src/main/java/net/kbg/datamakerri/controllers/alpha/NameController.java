@@ -21,6 +21,7 @@ import net.kb.datamaker.numbers.IntegerFactory;
 import net.kbg.datamakerri.helpers.AlphArgHelper;
 import net.kbg.datamakerri.model.ErrorMsg;
 import net.kbg.datamakerri.model.PersonName;
+import net.kbg.datamakerri.services.alpha.NameService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,33 +40,25 @@ public class NameController {
     private static final Logger log = LoggerFactory.getLogger(NameController.class);
 
     @Autowired
+    NameService nameService;
+    @Autowired
     private AlphArgHelper argHelper;
 
     @RequestMapping("/person")
     public ResponseEntity makeNameOfPerson(@RequestParam String gender, @RequestParam String namefmt) {
-        Optional<Gender> optGen = argHelper.genderArg(gender);
-        Optional<Integer> optInt = Optional.empty();
-        String nameFormat = namefmt;
 
-        if (namefmt.equals("RANDOM_NAME_FORMAT")) {
-            int arg = IntegerFactory.randomNumberInRange(0, 7);
-            Optional<String> optStr = argHelper.stringFromFormatArg(arg);
-            if (optStr.isPresent()) {
-                optInt = Optional.of(Integer.valueOf(arg));
-                nameFormat = argHelper.stringFromFormatArg(optInt.get()).get();
-            }  // else return 400 below.
-        } else {
-            optInt = argHelper.nameFormatArg(namefmt);
-        }
+        Optional<PersonName> optName = nameService.makeNameOfPerson(gender, namefmt);
 
-        if (optGen.isEmpty() || optInt.isEmpty()) {
+        if (optName.isEmpty()) {
             log.error("400 : Bad gender or namefmt argument : gender=" + gender + "  namefmt=" + namefmt);
             ErrorMsg errorMsg = new ErrorMsg("400", "Bad gender or namefmt argument");
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(errorMsg);
         }
-        PersonName name = new PersonName(optGen.get(), nameFormat, optInt.get());
+
+        PersonName name = optName.get();
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(name);

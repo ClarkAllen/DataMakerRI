@@ -14,30 +14,29 @@
  *     limitations under the License.
  */
 
-package net.kbg.datamakerri.controllers.alpha;
+package net.kbg.datamakerri.services.alpha;
 
-import net.kb.datamaker.alpha.StreetFactory;
+import net.kbg.datamakerri.DatamakerriApplication;
+import net.kbg.datamakerri.helpers.AlphArgHelper;
 import net.kbg.datamakerri.model.Street;
-import net.kbg.datamakerri.services.alpha.StreetService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.annotations.Test;
 
-@RestController
-@RequestMapping("/v1/alph")
-public class StreetController {
+import static org.testng.Assert.assertTrue;
+
+@SpringBootTest(classes = DatamakerriApplication.class)
+public class StreetServiceTest extends AbstractTestNGSpringContextTests {
+    @Autowired
+    StreetService service;
 
     @Autowired
-    StreetService streetService;
+    AlphArgHelper argHelper;
 
-    @GetMapping("/street")
-    public ResponseEntity makeStreet() {
-        Street street = streetService.makeStreet();
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(street);
+    @Test
+    public void testMakeStreet() {
+        Street street = service.makeStreet();
+        assertTrue(argHelper.hasContent(street.getStreet()));
     }
 }
