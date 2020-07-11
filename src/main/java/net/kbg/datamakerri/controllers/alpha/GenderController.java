@@ -20,6 +20,7 @@ import net.kb.datamaker.alpha.Gender;
 import net.kbg.datamakerri.helpers.AlphArgHelper;
 import net.kbg.datamakerri.model.ErrorMsg;
 import net.kbg.datamakerri.model.GenderMod;
+import net.kbg.datamakerri.services.alpha.GenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,25 +29,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/v1/alph")
 public class GenderController {
 
     @Autowired
-    AlphArgHelper argHelper;
+    private GenderService service;
 
     @GetMapping("/gender")
     public ResponseEntity makeGender(@RequestParam String type) {
-        if (argHelper.genderArg(type).isEmpty()) {
+        Optional<GenderMod> gmod = service.makeGender(type);
+
+        if (gmod.isEmpty()) {
             ErrorMsg errorMsg = new ErrorMsg("400", "Bad type argument");
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(errorMsg);
         }
-        Gender g = argHelper.genderArg(type).get();
-        GenderMod gender = new GenderMod(g.getGenderSymbol(), g.getGenderString());
+
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(gender);
+                .body(gmod.get());
     }
 }

@@ -14,31 +14,31 @@
  *     limitations under the License.
  */
 
-package net.kbg.datamakerri.controllers.alpha;
+package net.kbg.datamakerri.services.alpha;
 
-import net.kb.datamaker.alpha.CityFactory;
+import net.kbg.datamakerri.DatamakerriApplication;
+import net.kbg.datamakerri.helpers.AlphArgHelper;
 import net.kbg.datamakerri.model.City;
-import net.kbg.datamakerri.services.alpha.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.annotations.Test;
 
-@RestController
-@RequestMapping("/v1/alph")
-public class CityController {
+import static org.testng.Assert.assertTrue;
+
+@SpringBootTest(classes = DatamakerriApplication.class)
+public class CityServiceTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
     private CityService service;
 
-    @GetMapping("/city")
-    public ResponseEntity makeCity() {
+    @Autowired
+    private AlphArgHelper argHelper;
+
+    @Test
+    public void testMakeCity() {
         City city = service.makeCity();
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(city);
+        assertTrue(argHelper.hasContent(city.getName()));
     }
 
 }

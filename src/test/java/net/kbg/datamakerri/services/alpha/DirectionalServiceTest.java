@@ -14,30 +14,31 @@
  *     limitations under the License.
  */
 
-package net.kbg.datamakerri.controllers.alpha;
+package net.kbg.datamakerri.services.alpha;
 
-import net.kb.datamaker.alpha.Directionals;
+import net.kbg.datamakerri.DatamakerriApplication;
+import net.kbg.datamakerri.helpers.AlphArgHelper;
 import net.kbg.datamakerri.model.Directional;
-import net.kbg.datamakerri.services.alpha.DirectionalService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.annotations.Test;
 
-@RestController
-@RequestMapping("/v1/alph")
-public class DirectionalController {
+import static org.testng.Assert.assertTrue;
+
+@SpringBootTest(classes = DatamakerriApplication.class)
+public class DirectionalServiceTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    DirectionalService service;
+    private DirectionalService service;
 
-    @GetMapping("/directional")
-    public ResponseEntity makeDirectional() {
+    @Autowired
+    AlphArgHelper argHelper;
+
+    @Test
+    public void testMakeDirectional() {
         Directional directional = service.makeDirectional();
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(directional);
+        assertTrue(argHelper.hasContent(directional.getShortText()));
+        assertTrue(argHelper.hasContent(directional.getLongText()));
     }
 }

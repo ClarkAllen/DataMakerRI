@@ -20,6 +20,7 @@ import net.kb.datamaker.alpha.LetterFactory;
 import net.kbg.datamakerri.helpers.AlphArgHelper;
 import net.kbg.datamakerri.model.ErrorMsg;
 import net.kbg.datamakerri.model.Letter;
+import net.kbg.datamakerri.services.alpha.LetterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +38,14 @@ public class LetterController {
     private static final Logger log = LoggerFactory.getLogger(LetterController.class);
 
     @Autowired
-    AlphArgHelper argHelper;
+    private LetterService letterService;
+
+    @Autowired
+    private AlphArgHelper argHelper;
 
     @GetMapping("/char")
     public ResponseEntity makeCharacter() {
-        Letter letr = new Letter(LetterFactory.randomLetter());
+        Letter letr = letterService.makeLetter();
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(letr);
@@ -49,17 +53,16 @@ public class LetterController {
 
     @PutMapping("/char")
     public ResponseEntity selectFromList(@RequestBody List<String> list) {
-        Optional<Character> opChar = argHelper.charFromStringList(list);
-        if (opChar.isEmpty()) {
+        Optional<Letter> opLetr = letterService.selectFromList(list);
+        if (opLetr.isEmpty()) {
             log.error("400 : Could not extract a random character from the list passed in.");
             ErrorMsg msg = new ErrorMsg("400", "Could not extract a random character from the list passed in.");
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(msg);
         }
-        Letter ltr = new Letter(opChar.get().toString());
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(ltr);
+                .body(opLetr.get());
     }
 }

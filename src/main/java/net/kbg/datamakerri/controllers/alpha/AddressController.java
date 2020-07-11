@@ -22,6 +22,7 @@ import net.kbg.datamakerri.helpers.AlphArgHelper;
 import net.kbg.datamakerri.helpers.NameFormatProcessor;
 import net.kbg.datamakerri.model.Address;
 import net.kbg.datamakerri.model.ErrorMsg;
+import net.kbg.datamakerri.services.alpha.AddressService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,41 +42,22 @@ public class AddressController {
     private static final Logger log = LoggerFactory.getLogger(AddressController.class);
 
     @Autowired
-    private AlphArgHelper argHelper;
-
-    @Autowired
-    private NameFormatProcessor nameFormatProcessor;
+    private AddressService service;
 
     @GetMapping("/address")
     public ResponseEntity makeAddress(@RequestParam String gender, @RequestParam String namefmt) {
         log.debug("address to person : gender=" + gender + ", namefmt=" + namefmt);
-        Optional<Gender> opGen = argHelper.genderArg(gender);
-        Optional<Integer> opInt = argHelper.nameFormatArg(namefmt);
-        if (opGen.isEmpty() || opInt.isEmpty()) {
-            log.error("400 Bad arguments");
-            ErrorMsg errorMsg = new ErrorMsg("400", "Bad gender or name format argument");
+        Optional<Address> opRslt = service.makeAddress(gender, namefmt);
+        if (opRslt.isEmpty()) {
+            ErrorMsg errorMsg = new ErrorMsg(
+                    "400", "Bad gender argument or " +
+                    "name format argument.  Please check your arguments.");
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(errorMsg);
         }
-        Gender gen = argHelper.genderArg(gender).get();
-        int fmt = opInt.get();
-
-        if (namefmt.toUpperCase().contains("FI_") || namefmt.toUpperCase().equals("LAST_FI")) {
-            Optional<Address> optAddr = nameFormatProcessor.processNameFormat(namefmt);
-            if (optAddr.isEmpty()) {
-                log.error("unable to get Address for spec " + namefmt);
-                throw new RuntimeException("Address processing error");
-            }
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(optAddr.get());
-        }
-
-        String addr = AddressFactory.addressToPerson(gen, fmt);
-        Address rslt = new Address(addr);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(rslt);
+                .body(opRslt.get());
     }
 }
