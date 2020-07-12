@@ -18,14 +18,12 @@ package net.kbg.datamakerri.services.date;
 
 import net.kb.datamaker.dates.DateFactory;
 import net.kbg.datamakerri.model.DateValue;
-import net.kbg.datamakerri.model.ErrorMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 
@@ -33,6 +31,9 @@ import java.util.Optional;
 public class DateService {
 
     private static final Logger log = LoggerFactory.getLogger(DateService.class);
+    private static final SimpleDateFormat sdf =
+            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+
 
     public Optional<DateValue> makeDateInYear(int year) {
         if (year < 1 || year > 4_000) {
@@ -41,7 +42,7 @@ public class DateService {
         }
 
         Date dt = DateFactory.makeDateInYear(year);
-        String iso8601 = dt.toInstant().toString();
+        String iso8601 = sdf.format(dt);
         DateValue dateValue = new DateValue(iso8601, dt.getTime());
         return Optional.of(dateValue);
     }
@@ -53,7 +54,7 @@ public class DateService {
         }
 
         Date dt = DateFactory.dateInMonthYear(month - 1, year);
-        String iso8601 = dt.toInstant().toString();
+        String iso8601 = sdf.format(dt);
         DateValue dateValue = new DateValue(iso8601, dt.getTime());
         return Optional.of(dateValue);
     }
@@ -66,7 +67,7 @@ public class DateService {
         }
 
         Date dt = DateFactory.makeDateInYearRange(lowyear, highyear);
-        String iso8601 = dt.toInstant().toString();
+        String iso8601 = sdf.format(dt);
         DateValue dateValue = new DateValue(iso8601, dt.getTime());
         return Optional.of(dateValue);
     }

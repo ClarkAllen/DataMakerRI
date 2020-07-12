@@ -38,12 +38,10 @@ public class StateServiceTest extends AbstractTestNGSpringContextTests {
     @Test
     public void testMakeState() {
         State state = service.makeState();
+        System.out.println("State ==> " + state.toString());
         assertTrue(argHelper.hasContent(state.getName()));
         assertTrue(argHelper.hasContent(state.getAbbrev()));
         assertTrue(argHelper.hasContent(state.getFipsCode()));
-        assertTrue(argHelper.hasContent(state.getRegion()));
-        assertTrue(argHelper.hasContent(state.getRegionNumber()));
-        assertTrue(argHelper.hasContent(state.getDivision()));
-        assertTrue(argHelper.hasContent(state.getDivisionNumber()));
     }
+
 }

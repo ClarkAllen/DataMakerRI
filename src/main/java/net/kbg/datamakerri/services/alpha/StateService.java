@@ -18,7 +18,6 @@ package net.kbg.datamakerri.services.alpha;
 
 import net.kb.datamaker.alpha.States;
 import net.kbg.datamakerri.model.State;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
