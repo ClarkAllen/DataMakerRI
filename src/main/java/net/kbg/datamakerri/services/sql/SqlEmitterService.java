@@ -17,10 +17,9 @@
 package net.kbg.datamakerri.services.sql;
 
 import net.kbg.datamakerri.helpers.AlphArgHelper;
-import net.kbg.datamakerri.model.Address;
-import net.kbg.datamakerri.model.Field;
-import net.kbg.datamakerri.model.Table;
+import net.kbg.datamakerri.model.*;
 import net.kbg.datamakerri.services.alpha.AddressService;
+import net.kbg.datamakerri.services.alpha.NameService;
 import net.kbg.datamakerri.services.alpha.TextService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +36,7 @@ public class SqlEmitterService {
     private AlphArgHelper argHelper;
 
     @Autowired
-    private AddressService addrService;
+    private NameService nameService;
 
     @Autowired
     private TextService textService;
@@ -83,24 +82,51 @@ public class SqlEmitterService {
               Map<String, List<String>> fromLists) {
 
         StringBuffer value = new StringBuffer();
+
         switch (field.getDmSourceType().toLowerCase()) {
-            case "id" : value.append("" + rowId);
-                        break;
-            case "uuid" : value.append(quote(textService.makeUuid().getValue()));
-                        break;
-            case "rtext" : value.append(textService.makeText(field.getLength()));
-                        break;
-            case "address" :
-                        Optional<Address> opAddr = addrService.makeAddress(field.getGender(), field.getNameFormat());
-                        value.append(opAddr.get());
+            case "id" :
+                value.append("" + rowId);
+                break;
+            case "uuid" :
+                value.append(quote(textService.makeUuid().getValue()));
+                break;
+            case "rtext" :
+                Optional<TextResult> optTxt = textService.makeText(field.getLength());
+                if (optTxt.isPresent()) {
+                    value.append(quote(optTxt.get().getValue()));
+                } else {
+                    throw new RuntimeException("Error making random text");
+                }
+                break;
+            case "fname" :
+                Optional<PersonName> opName = nameService.makeNameOfPerson(field.getGender(),
+                        "FIRST_MIDDLE_LAST");
+                if (opName.isPresent()) {
+                    value.append(quote(opName.get().getFirst()));
+                } else {
+                    throw new RuntimeException("Error making person name");
+                }
+                break;
+            case "lname" :
+                Optional<PersonName> optName = nameService.makeNameOfPerson(field.getGender(),
+                        "FIRST_MIDDLE_LAST");
+                if (optName.isPresent()) {
+                    value.append(quote(optName.get().getLast()));
+                } else {
+                    throw new RuntimeException("Error making person name");
+                }
+                break;
         }
         return value.toString();
     }
 
     public String quote(String arg) {
+        String qt1 = "'";
+        String qt2 = "''";
+
         if (argHelper.noContent(arg)) {
-            return "''";
+            return qt2;
         }
-        return "'" + arg + "'";
+        return qt1 + arg.replaceAll(qt1, qt2) + qt1;
     }
 }

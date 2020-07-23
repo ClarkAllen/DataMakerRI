@@ -54,8 +54,65 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
             System.out.println(s);
         }
         assertNotNull(sql);
-        assertTrue(sql.size() > 0);
+        assertTrue(sql.size() == 6);
+        assertTrue(sql.get(0).contains("INSERT INTO UNIQUE_IDS (ID,UUID)"));
+        assertTrue(sql.get(1).contains("VALUES (1,"));
+        assertTrue(sql.get(2).contains("VALUES (2,"));
+    }
 
+    @Test
+    public void testEmitRandomText() {
+        Map<String, List<String>> fromLists = new HashMap<>();
+        List<Field> fields = new LinkedList<>();
+        Field id = new Field("ID", "id", "",
+                36, 1, Long.MAX_VALUE, "", "");
+        Field rtext = new Field("COMMENT", "rtext", "",
+                35, 1, 1,"", "");
+        fields.add(id);
+        fields.add(rtext);
+        Table table = new Table("COMMENTS", 5, fields);
+        List<String> sql = sqlService.emit(20, table, fromLists);
+        for (String s : sql) {
+            System.out.println(s);
+        }
+        assertNotNull(sql);
+        assertTrue(sql.size() == 6);
+        assertTrue(sql.get(0).contains("INSERT INTO COMMENTS (ID,COMMENT)"));
+        assertTrue(sql.get(1).contains("VALUES (20,"));
+        assertTrue(sql.get(2).contains("VALUES (21,"));
+    }
+
+    @Test
+    public void testEmitFNameLName() {
+        Map<String, List<String>> fromLists = new HashMap<>();
+        List<Field> fields = new LinkedList<>();
+        String tableName = "MEMBERS";
+        String field1Name = "FIRST_NAME";
+        String field2Name = "LAST_NAME";
+        Field id = new Field("ID", "id", "",
+                36, 1, Long.MAX_VALUE, "", "");
+        Field fname = new Field(field1Name, "fname", "",
+                1, 1, 1,"R", "");
+        Field lname = new Field(field2Name, "lname", "",
+                1, 1, 1,"R", "");
+        fields.add(id);
+        fields.add(fname);
+        fields.add(lname);
+        Table table = new Table(tableName, 5, fields);
+        List<String> sql = sqlService.emit(20, table, fromLists);
+        for (String s : sql) {
+            System.out.println(s);
+        }
+        assertNotNull(sql);
+        assertTrue(sql.size() == 6);
+        assertTrue(sql.get(0).contains(
+                "INSERT INTO "
+                        + tableName +
+                        " (ID,"
+                        + field1Name + ","
+                        + field2Name + ")"));
+        assertTrue(sql.get(1).contains("VALUES (20,"));
+        assertTrue(sql.get(2).contains("VALUES (21,"));
     }
 
 }
