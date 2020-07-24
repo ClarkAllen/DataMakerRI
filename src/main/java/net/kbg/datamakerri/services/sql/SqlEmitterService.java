@@ -18,9 +18,7 @@ package net.kbg.datamakerri.services.sql;
 
 import net.kbg.datamakerri.helpers.AlphArgHelper;
 import net.kbg.datamakerri.model.*;
-import net.kbg.datamakerri.services.alpha.AddressService;
-import net.kbg.datamakerri.services.alpha.NameService;
-import net.kbg.datamakerri.services.alpha.TextService;
+import net.kbg.datamakerri.services.alpha.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +35,15 @@ public class SqlEmitterService {
 
     @Autowired
     private NameService nameService;
+
+    @Autowired
+    private StreetService streetService;
+
+    @Autowired
+    private CityService cityService;
+
+    @Autowired
+    private StateService stateService;
 
     @Autowired
     private TextService textService;
@@ -115,6 +122,18 @@ public class SqlEmitterService {
                 } else {
                     throw new RuntimeException("Error making person name");
                 }
+                break;
+            case "street" :
+                Street street = streetService.makeStreet();
+                value.append(quote(street.getStreet()));
+                break;
+            case "city" :
+                City city = cityService.makeCity();
+                value.append(quote(city.getName()));
+                break;
+            case "state" :
+                State state = stateService.makeState();
+                value.append(quote(state.getName()));
                 break;
         }
         return value.toString();

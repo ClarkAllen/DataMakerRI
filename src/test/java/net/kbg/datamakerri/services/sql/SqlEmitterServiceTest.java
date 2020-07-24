@@ -115,4 +115,42 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
         assertTrue(sql.get(2).contains("VALUES (21,"));
     }
 
+    @Test
+    public void testEmitStreetCityState() {
+        Map<String, List<String>> fromLists = new HashMap<>();
+        List<Field> fields = new LinkedList<>();
+        String tableName = "ADDRESSES";
+        String field1Name = "STREET";
+        String field2Name = "CITY";
+        String field3Name = "STATE";
+        Field id = new Field("ID", "id", "",
+                36, 1, Long.MAX_VALUE, "", "");
+        Field street = new Field(field1Name, "street", "",
+                1, 1, 1,"", "");
+        Field city = new Field(field2Name, "city", "",
+                1, 1, 1,"", "");
+        Field state = new Field(field3Name, "state", "",
+                1, 1, 1,"", "");
+        fields.add(id);
+        fields.add(street);
+        fields.add(city);
+        fields.add(state);
+        Table table = new Table(tableName, 5, fields);
+        List<String> sql = sqlService.emit(20, table, fromLists);
+        for (String s : sql) {
+            System.out.println(s);
+        }
+        assertNotNull(sql);
+        assertTrue(sql.size() == 6);
+        assertTrue(sql.get(0).contains(
+                "INSERT INTO "
+                        + tableName +
+                        " (ID,"
+                        + field1Name + ","
+                        + field2Name + ","
+                        + field3Name + ")"));
+        assertTrue(sql.get(1).contains("VALUES (20,"));
+        assertTrue(sql.get(2).contains("VALUES (21,"));
+    }
+
 }
