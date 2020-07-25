@@ -153,4 +153,42 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
         assertTrue(sql.get(2).contains("VALUES (21,"));
     }
 
+    @Test
+    public void testEmitBooleanValues() {
+        Map<String, List<String>> fromLists = new HashMap<>();
+        List<Field> fields = new LinkedList<>();
+        String tableName = "TRUTHINESS";
+        String field1Name = "TRUE_INT";
+        String field2Name = "TRUE_BOOL";
+        String field3Name = "TRUE_STRING";
+        Field id = new Field("ID", "id", "",
+                36, 1, Long.MAX_VALUE, "", "");
+        Field boolint = new Field(field1Name, "bool", "int",
+                1, 1, 1,"", "");
+        Field boolTF = new Field(field2Name, "bool", "boolean",
+                1, 1, 1,"", "");
+        Field boolstr = new Field(field3Name, "bool", "string",
+                1, 1, 1,"", "");
+        fields.add(id);
+        fields.add(boolint);
+        fields.add(boolTF);
+        fields.add(boolstr);
+        Table table = new Table(tableName, 5, fields);
+        List<String> sql = sqlService.emit(20, table, fromLists);
+        for (String s : sql) {
+            System.out.println(s);
+        }
+        assertNotNull(sql);
+        assertTrue(sql.size() == 6);
+        assertTrue(sql.get(0).contains(
+                "INSERT INTO "
+                        + tableName +
+                        " (ID,"
+                        + field1Name + ","
+                        + field2Name + ","
+                        + field3Name + ")"));
+        assertTrue(sql.get(1).contains("VALUES (20,"));
+        assertTrue(sql.get(2).contains("VALUES (21,"));
+    }
+
 }

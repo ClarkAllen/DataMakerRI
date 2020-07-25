@@ -19,6 +19,7 @@ package net.kbg.datamakerri.services.sql;
 import net.kbg.datamakerri.helpers.AlphArgHelper;
 import net.kbg.datamakerri.model.*;
 import net.kbg.datamakerri.services.alpha.*;
+import net.kbg.datamakerri.services.bool.BooleanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +48,9 @@ public class SqlEmitterService {
 
     @Autowired
     private TextService textService;
+
+    @Autowired
+    private BooleanService booleanService;
 
     public List<String> emit(int startId, Table table, Map<String, List<String>> fromLists) {
         List<String> sql = new LinkedList<>();
@@ -134,6 +138,22 @@ public class SqlEmitterService {
             case "state" :
                 State state = stateService.makeState();
                 value.append(quote(state.getName()));
+                break;
+            case "bool" :
+                BooleanValue val = booleanService.makeRandomBoolean();
+                switch(field.getDatabaseType()) {
+                    case "int" :
+                        value.append(val.getIntValue());
+                        break;
+                    case "boolean" :
+                        value.append(val.isTruth());
+                        break;
+                    case "string" :
+                        value.append(quote(val.getStringValue()));
+                        break;
+                    default :
+                        throw new RuntimeException("Bad state for boolean creation");
+                }
                 break;
         }
         return value.toString();
