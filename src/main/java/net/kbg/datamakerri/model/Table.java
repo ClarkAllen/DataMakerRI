@@ -16,53 +16,28 @@
 
 package net.kbg.datamakerri.model;
 
+import lombok.*;
+
+import java.util.LinkedList;
 import java.util.List;
 
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
+@ToString
 public class Table {
 
     private String name;
     private int rows;
+    private int startRowNum;
     private List<Field> fields;
 
     public Table() {
+        name = "";
+        rows = 0;
+        startRowNum = 1;
+        fields = new LinkedList<>();
     }
 
-    public Table(String name, int rows, List<Field> fields) {
-        this.name = name;
-        this.rows = rows;
-        this.fields = fields;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getRows() {
-        return rows;
-    }
-
-    public void setRows(int rows) {
-        this.rows = rows;
-    }
-
-    public List<Field> getFields() {
-        return fields;
-    }
-
-    public void setFields(List<Field> fields) {
-        this.fields = fields;
-    }
-
-    @Override
-    public String toString() {
-        return "Table{" +
-                "name='" + name + '\'' +
-                ", rows=" + rows +
-                ", fields=" + fields +
-                '}';
-    }
 }

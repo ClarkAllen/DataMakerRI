@@ -42,14 +42,20 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
     public void testEmitUuid() {
         Map<String, List<String>> fromLists = new HashMap<>();
         List<Field> fields = new LinkedList<>();
-        Field id = new Field("ID", "id", "",
-                36, 1, Long.MAX_VALUE, "", "");
-        Field uuid = new Field("UUID", "uuid", "",
-                1, 1, 1,"", "");
+        Field id = Field.builder().name("ID").dmSourceType("id").build();
+        Field uuid = Field.builder()
+                .name("UUID")
+                .dmSourceType("uuid")
+                .build();
         fields.add(id);
         fields.add(uuid);
-        Table table = new Table("UNIQUE_IDS", 5, fields);
-        List<String> sql = sqlService.emit(1, table, fromLists);
+        Table table = Table.builder()
+                .name("UNIQUE_IDS")
+                .rows(5)
+                .startRowNum(1)
+                .fields(fields)
+                .build();
+        List<String> sql = sqlService.emit(table, fromLists);
         for (String s : sql) {
             System.out.println(s);
         }
@@ -64,14 +70,21 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
     public void testEmitRandomText() {
         Map<String, List<String>> fromLists = new HashMap<>();
         List<Field> fields = new LinkedList<>();
-        Field id = new Field("ID", "id", "",
-                36, 1, Long.MAX_VALUE, "", "");
-        Field rtext = new Field("COMMENT", "rtext", "",
-                35, 1, 1,"", "");
+        Field id = Field.builder().name("ID").dmSourceType("id").build();
+        Field rtext = Field.builder()
+                .name("COMMENT")
+                .dmSourceType("rtext")
+                .length(35)
+                .build();
         fields.add(id);
         fields.add(rtext);
-        Table table = new Table("COMMENTS", 5, fields);
-        List<String> sql = sqlService.emit(20, table, fromLists);
+        Table table = Table.builder()
+                .name("COMMENTS")
+                .rows(5)
+                .startRowNum(20)
+                .fields(fields)
+                .build();
+        List<String> sql = sqlService.emit(table, fromLists);
         for (String s : sql) {
             System.out.println(s);
         }
@@ -89,17 +102,27 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
         String tableName = "MEMBERS";
         String field1Name = "FIRST_NAME";
         String field2Name = "LAST_NAME";
-        Field id = new Field("ID", "id", "",
-                36, 1, Long.MAX_VALUE, "", "");
-        Field fname = new Field(field1Name, "fname", "",
-                1, 1, 1,"R", "");
-        Field lname = new Field(field2Name, "lname", "",
-                1, 1, 1,"R", "");
+        Field id = Field.builder().name("ID").dmSourceType("id").build();
+        Field fname = Field.builder()
+                .name(field1Name)
+                .dmSourceType("fname")
+                .gender("R")
+                .build();
+        Field lname = Field.builder()
+                .name(field2Name)
+                .dmSourceType("lname")
+                .gender("R")
+                .build();
         fields.add(id);
         fields.add(fname);
         fields.add(lname);
-        Table table = new Table(tableName, 5, fields);
-        List<String> sql = sqlService.emit(20, table, fromLists);
+        Table table = Table.builder()
+                .name(tableName)
+                .rows(5)
+                .startRowNum(20)
+                .fields(fields)
+                .build();
+        List<String> sql = sqlService.emit(table, fromLists);
         for (String s : sql) {
             System.out.println(s);
         }
@@ -123,20 +146,30 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
         String field1Name = "STREET";
         String field2Name = "CITY";
         String field3Name = "STATE";
-        Field id = new Field("ID", "id", "",
-                36, 1, Long.MAX_VALUE, "", "");
-        Field street = new Field(field1Name, "street", "",
-                1, 1, 1,"", "");
-        Field city = new Field(field2Name, "city", "",
-                1, 1, 1,"", "");
-        Field state = new Field(field3Name, "state", "",
-                1, 1, 1,"", "");
+        Field id = Field.builder().name("ID").dmSourceType("id").build();
+        Field street = Field.builder()
+                .name(field1Name)
+                .dmSourceType("street")
+                .build();
+        Field city = Field.builder()
+                .name(field2Name)
+                .dmSourceType("city")
+                .build();
+        Field state = Field.builder()
+                .name(field3Name)
+                .dmSourceType("state")
+                .build();
         fields.add(id);
         fields.add(street);
         fields.add(city);
         fields.add(state);
-        Table table = new Table(tableName, 5, fields);
-        List<String> sql = sqlService.emit(20, table, fromLists);
+        Table table = Table.builder()
+                .name(tableName)
+                .rows(5)
+                .startRowNum(20)
+                .fields(fields)
+                .build();
+        List<String> sql = sqlService.emit(table, fromLists);
         for (String s : sql) {
             System.out.println(s);
         }
@@ -161,20 +194,33 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
         String field1Name = "TRUE_INT";
         String field2Name = "TRUE_BOOL";
         String field3Name = "TRUE_STRING";
-        Field id = new Field("ID", "id", "",
-                36, 1, Long.MAX_VALUE, "", "");
-        Field boolint = new Field(field1Name, "bool", "int",
-                1, 1, 1,"", "");
-        Field boolTF = new Field(field2Name, "bool", "boolean",
-                1, 1, 1,"", "");
-        Field boolstr = new Field(field3Name, "bool", "string",
-                1, 1, 1,"", "");
+        Field id = Field.builder().name("ID").dmSourceType("id").build();
+        Field boolint = Field.builder()
+                .name(field1Name)
+                .dmSourceType("bool")
+                .databaseType("int")
+                .build();
+        Field boolTF = Field.builder()
+                .name(field2Name)
+                .dmSourceType("bool")
+                .databaseType("boolean")
+                .build();
+        Field boolstr = Field.builder()
+                .name(field3Name)
+                .dmSourceType("bool")
+                .databaseType("string")
+                .build();
         fields.add(id);
         fields.add(boolint);
         fields.add(boolTF);
         fields.add(boolstr);
-        Table table = new Table(tableName, 5, fields);
-        List<String> sql = sqlService.emit(20, table, fromLists);
+        Table table = Table.builder()
+                .name(tableName)
+                .rows(5)
+                .startRowNum(20)
+                .fields(fields)
+                .build();
+        List<String> sql = sqlService.emit(table, fromLists);
         for (String s : sql) {
             System.out.println(s);
         }

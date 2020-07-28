@@ -52,7 +52,7 @@ public class SqlEmitterService {
     @Autowired
     private BooleanService booleanService;
 
-    public List<String> emit(int startId, Table table, Map<String, List<String>> fromLists) {
+    public List<String> emit(Table table, Map<String, List<String>> fromLists) {
         List<String> sql = new LinkedList<>();
         if (table.getRows() < 1) {
             return sql;
@@ -60,9 +60,9 @@ public class SqlEmitterService {
         sql.add(makeInsertStatement(table));
         for (int b = 0; b < table.getRows(); ++b) {
             if (b == table.getRows() - 1) {
-                sql.add(generateRow(startId + b, table, fromLists) + ";");
+                sql.add(generateRow(table.getStartRowNum() + b, table, fromLists) + ";");
             } else {
-                sql.add(generateRow(startId + b, table, fromLists) + ", ");
+                sql.add(generateRow(table.getStartRowNum() + b, table, fromLists) + ", ");
             }
         }
         return sql;
@@ -154,6 +154,15 @@ public class SqlEmitterService {
                     default :
                         throw new RuntimeException("Bad state for boolean creation");
                 }
+                break;
+            case "datemonyr" :
+
+                break;
+            case "dateinyr" :
+
+                break;
+            case "datebetwyrs" :
+
                 break;
         }
         return value.toString();

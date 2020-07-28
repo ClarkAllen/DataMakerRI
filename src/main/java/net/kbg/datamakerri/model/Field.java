@@ -16,6 +16,13 @@
 
 package net.kbg.datamakerri.model;
 
+import lombok.*;
+
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
+@ToString
 public class Field {
 
     private String name;
@@ -24,100 +31,25 @@ public class Field {
     private int length;
     private long rangeLowEnd;
     private long rangeHighEnd;
+    private int month;
+    private int yearLowEnd;
+    private int yearHighEnd;
     private String gender;
     private String nameFormat;
+    private int precision;
 
     public Field() {
-    }
-
-    public Field(String name, String dmSourceType, String databaseType,
-                 int length, long rangeLowEnd, long rangeHighEnd,
-                 String gender, String nameFormat) {
-        this.name = name;
-        this.dmSourceType = dmSourceType;
-        this.databaseType = databaseType;
-        this.length = length;
-        this.rangeLowEnd = rangeLowEnd;
-        this.rangeHighEnd = rangeHighEnd;
-        this.gender = gender;
-        this.nameFormat = nameFormat;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDmSourceType() {
-        return dmSourceType;
-    }
-
-    public void setDmSourceType(String dmSourceType) {
-        this.dmSourceType = dmSourceType;
-    }
-
-    public String getDatabaseType() {
-        return databaseType;
-    }
-
-    public void setDatabaseType(String databaseType) {
-        this.databaseType = databaseType;
-    }
-
-    public int getLength() {
-        return length;
-    }
-
-    public void setLength(int length) {
-        this.length = length;
-    }
-
-    public long getRangeLowEnd() {
-        return rangeLowEnd;
-    }
-
-    public void setRangeLowEnd(long rangeLowEnd) {
-        this.rangeLowEnd = rangeLowEnd;
-    }
-
-    public long getRangeHighEnd() {
-        return rangeHighEnd;
-    }
-
-    public void setRangeHighEnd(long rangeHighEnd) {
-        this.rangeHighEnd = rangeHighEnd;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getNameFormat() {
-        return nameFormat;
-    }
-
-    public void setNameFormat(String nameFormat) {
-        this.nameFormat = nameFormat;
-    }
-
-    @Override
-    public String toString() {
-        return "Field{" +
-                "name='" + name + '\'' +
-                ", dmSourceType='" + dmSourceType + '\'' +
-                ", databaseType='" + databaseType + '\'' +
-                ", length=" + length +
-                ", rangeLowEnd=" + rangeLowEnd +
-                ", rangeHighEnd=" + rangeHighEnd +
-                ", gender='" + gender + '\'' +
-                ", nameFormat='" + nameFormat + '\'' +
-                '}';
+        name = "";
+        dmSourceType = "";
+        databaseType = "";
+        length = 0;
+        rangeLowEnd = 0;
+        rangeHighEnd = 0;
+        month = 0;
+        yearLowEnd = 0;
+        yearHighEnd = 0;
+        gender = "R";
+        nameFormat = "";
+        precision = 2;
     }
 }
