@@ -156,4 +156,18 @@ public class AlphArgHelperTest extends AbstractTestNGSpringContextTests {
         assertTrue(optChar.isEmpty());
     }
 
+    @Test
+    public void testMakePrecisionPattern() {
+        for (int b = 1; b < 6; ++b) {
+            String rslt = argHelper.makePrecisionPattern(b);
+            System.out.println("precision format = " + rslt);
+            assertEquals(rslt.length(), b + 2);
+            assertTrue(rslt.matches("#\\.#+"));
+        }
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testMakePrecisionPatternBadArg() {
+        String rslt = argHelper.makePrecisionPattern(0);
+    }
 }

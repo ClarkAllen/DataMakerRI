@@ -32,11 +32,15 @@ public class Field {
     private long rangeLowEnd;
     private long rangeHighEnd;
     private int month;
+    private int year;
     private int yearLowEnd;
     private int yearHighEnd;
     private String gender;
     private String nameFormat;
     private int precision;
+    private String pattern;
+    private String charSymbol;
+    private String numSymbol;
 
     public Field() {
         name = "";
@@ -46,10 +50,14 @@ public class Field {
         rangeLowEnd = 0;
         rangeHighEnd = 0;
         month = 0;
+        year = 0;
         yearLowEnd = 0;
         yearHighEnd = 0;
         gender = "R";
         nameFormat = "";
         precision = 2;
+        pattern = "";
+        charSymbol = "";
+        numSymbol = "";
     }
 }

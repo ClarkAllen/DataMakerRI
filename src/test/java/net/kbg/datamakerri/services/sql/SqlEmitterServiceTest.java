@@ -237,4 +237,141 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
         assertTrue(sql.get(2).contains("VALUES (21,"));
     }
 
+    @Test
+    public void testEmitDates() {
+        Map<String, List<String>> fromLists = new HashMap<>();
+        List<Field> fields = new LinkedList<>();
+        String tableName = "TIMELINESS";
+        String field1Name = "MONTH_YEAR";
+        String field2Name = "IN_YEAR";
+        String field3Name = "IN_YEAR_RANGE";
+        Field id = Field.builder().name("ID").dmSourceType("id").build();
+        Field moyr = Field.builder()
+                .name(field1Name)
+                .dmSourceType("datemonyr")
+                .month(6)
+                .year(2011)
+                .build();
+        Field inyr = Field.builder()
+                .name(field2Name)
+                .dmSourceType("dateinyr")
+                .year(2012)
+                .build();
+        Field yrrange = Field.builder()
+                .name(field3Name)
+                .dmSourceType("datebetwyrs")
+                .yearLowEnd(2013)
+                .yearHighEnd(2019)
+                .build();
+        fields.add(id);
+        fields.add(moyr);
+        fields.add(inyr);
+        fields.add(yrrange);
+        Table table = Table.builder()
+                .name(tableName)
+                .rows(5)
+                .startRowNum(1)
+                .fields(fields)
+                .build();
+        List<String> sql = sqlService.emit(table, fromLists);
+        for (String s : sql) {
+            System.out.println(s);
+        }
+        assertNotNull(sql);
+        assertTrue(sql.size() == 6);
+        assertTrue(sql.get(0).contains(
+                "INSERT INTO "
+                        + tableName +
+                        " (ID,"
+                        + field1Name + ","
+                        + field2Name + ","
+                        + field3Name + ")"));
+        assertTrue(sql.get(1).contains("VALUES (1,"));
+        assertTrue(sql.get(2).contains("VALUES (2,"));
+    }
+
+    @Test
+    public void testEmitPattern() {
+        Map<String, List<String>> fromLists = new HashMap<>();
+        List<Field> fields = new LinkedList<>();
+        String tableName = "PATTERNS";
+        String field1Name = "LICENCE_TAG";
+        Field id = Field.builder().name("ID").dmSourceType("id").build();
+        Field tag = Field.builder()
+                .name(field1Name)
+                .dmSourceType("pattern")
+                .pattern("ccc nnnn")
+                .charSymbol("c")
+                .numSymbol("n")
+                .build();
+        fields.add(id);
+        fields.add(tag);
+        Table table = Table.builder()
+                .name(tableName)
+                .rows(5)
+                .startRowNum(1)
+                .fields(fields)
+                .build();
+        List<String> sql = sqlService.emit(table, fromLists);
+        for (String s : sql) {
+            System.out.println(s);
+        }
+        assertNotNull(sql);
+        assertTrue(sql.size() == 6);
+        assertTrue(sql.get(0).contains(
+                "INSERT INTO "
+                        + tableName +
+                        " (ID,"
+                        + field1Name + ")"));
+        assertTrue(sql.get(1).contains("VALUES (1,"));
+        assertTrue(sql.get(2).contains("VALUES (2,"));
+    }
+
+    @Test
+    public void testEmitDouble() {
+        Map<String, List<String>> fromLists = new HashMap<>();
+        List<Field> fields = new LinkedList<>();
+        String tableName = "DOUBLES";
+        String field1Name = "PRICE";
+        String field2Name = "INDEX";
+        Field id = Field.builder().name("ID").dmSourceType("id").build();
+        Field price = Field.builder()
+                .name(field1Name)
+                .dmSourceType("double")
+                .rangeLowEnd(5)
+                .rangeHighEnd(15)
+                .precision(2)
+                .build();
+        Field index = Field.builder()
+                .name(field2Name)
+                .dmSourceType("double")
+                .rangeLowEnd(1)
+                .rangeHighEnd(3)
+                .precision(3)
+                .build();
+        fields.add(id);
+        fields.add(price);
+        fields.add(index);
+        Table table = Table.builder()
+                .name(tableName)
+                .rows(5)
+                .startRowNum(1)
+                .fields(fields)
+                .build();
+        List<String> sql = sqlService.emit(table, fromLists);
+        for (String s : sql) {
+            System.out.println(s);
+        }
+        assertNotNull(sql);
+        assertTrue(sql.size() == 6);
+        assertTrue(sql.get(0).contains(
+                "INSERT INTO "
+                        + tableName +
+                        " (ID,"
+                        + field1Name + ","
+                        + field2Name + ")"));
+        assertTrue(sql.get(1).contains("VALUES (1,"));
+        assertTrue(sql.get(2).contains("VALUES (2,"));
+    }
+
 }

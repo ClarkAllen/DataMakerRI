@@ -100,4 +100,15 @@ public class AlphArgHelper {
         return ! hasContent(arg);
     }
 
+    public String makePrecisionPattern(int precision) {
+        if (precision < 1) {
+            throw new IllegalArgumentException("Precision argument must be greater than zero");
+        }
+        StringBuilder sb = new StringBuilder("#.");
+        for (int k = 0; k < precision; ++k) {
+            sb.append("#");
+        }
+        return sb.toString();
+    }
+
 }

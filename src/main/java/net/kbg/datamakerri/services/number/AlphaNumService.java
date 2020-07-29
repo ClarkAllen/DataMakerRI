@@ -16,19 +16,17 @@
 
 package net.kbg.datamakerri.services.number;
 
+import lombok.extern.slf4j.Slf4j;
 import net.kb.datamaker.numbers.AlphaNumFactory;
 import net.kbg.datamakerri.input.PatternTemplate;
 import net.kbg.datamakerri.model.TextResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class AlphaNumService {
-
-    private static final Logger log = LoggerFactory.getLogger(AlphaNumService.class);
 
     public Optional<TextResult> makeAlphaNumPatternText(PatternTemplate template) {
         if (template.isNotValid()) {

@@ -16,15 +16,26 @@
 
 package net.kbg.datamakerri.input;
 
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
 public class PatternTemplate {
     private String pattern;
     private String charSymbol;
     private String numSymbol;
 
     public PatternTemplate() {
+        pattern = "";
+        charSymbol = "";
+        numSymbol = "";
     }
 
-    public PatternTemplate(String pattern, String charSymbol, String numSymbol) {
+    public PatternTemplate(@NonNull String pattern, @NonNull String charSymbol, @NonNull String numSymbol) {
         this.pattern = pattern;
         this.charSymbol = charSymbol;
         this.numSymbol = numSymbol;
@@ -43,36 +54,4 @@ public class PatternTemplate {
         return ! isValid();
     }
 
-    public String getPattern() {
-        return pattern;
-    }
-
-    public void setPattern(String pattern) {
-        this.pattern = pattern;
-    }
-
-    public String getCharSymbol() {
-        return charSymbol;
-    }
-
-    public void setCharSymbol(String charSymbol) {
-        this.charSymbol = charSymbol;
-    }
-
-    public String getNumSymbol() {
-        return numSymbol;
-    }
-
-    public void setNumSymbol(String numSymbol) {
-        this.numSymbol = numSymbol;
-    }
-
-    @Override
-    public String toString() {
-        return "PatternTemplate{" +
-                "pattern='" + pattern + '\'' +
-                ", charSymbol='" + charSymbol + '\'' +
-                ", numSymbol='" + numSymbol + '\'' +
-                '}';
-    }
 }

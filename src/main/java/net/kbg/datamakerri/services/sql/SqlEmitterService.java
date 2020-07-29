@@ -17,12 +17,17 @@
 package net.kbg.datamakerri.services.sql;
 
 import net.kbg.datamakerri.helpers.AlphArgHelper;
+import net.kbg.datamakerri.input.PatternTemplate;
 import net.kbg.datamakerri.model.*;
 import net.kbg.datamakerri.services.alpha.*;
 import net.kbg.datamakerri.services.bool.BooleanService;
+import net.kbg.datamakerri.services.date.DateService;
+import net.kbg.datamakerri.services.number.AlphaNumService;
+import net.kbg.datamakerri.services.number.DoubleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +56,15 @@ public class SqlEmitterService {
 
     @Autowired
     private BooleanService booleanService;
+
+    @Autowired
+    private DateService dateService;
+
+    @Autowired
+    private AlphaNumService alphaNumService;
+
+    @Autowired
+    private DoubleService doubleService;
 
     public List<String> emit(Table table, Map<String, List<String>> fromLists) {
         List<String> sql = new LinkedList<>();
@@ -156,13 +170,52 @@ public class SqlEmitterService {
                 }
                 break;
             case "datemonyr" :
-
+                Optional<DateValue> optDt = dateService.makeDateInMonthYear(
+                        field.getMonth(), field.getYear());
+                if (optDt.isPresent()) {
+                    value.append(quote(optDt.get().getIso8601()));
+                } else {
+                    throw new RuntimeException("Error creating date in month/year");
+                }
                 break;
             case "dateinyr" :
-
+                Optional<DateValue> optDtyr = dateService.makeDateInYear(
+                        field.getYear());
+                if (optDtyr.isPresent()) {
+                    value.append(quote(optDtyr.get().getIso8601()));
+                } else {
+                    throw new RuntimeException("Error creating date in year");
+                }
                 break;
             case "datebetwyrs" :
-
+                Optional<DateValue> optDtrg = dateService.makeDateInYearRange(
+                        field.getYearLowEnd(), field.getYearHighEnd());
+                if (optDtrg.isPresent()) {
+                    value.append(quote(optDtrg.get().getIso8601()));
+                } else {
+                    throw new RuntimeException("Error creating date in year range");
+                }
+                break;
+            case "pattern" :
+                PatternTemplate template = new PatternTemplate(field.getPattern(), field.getCharSymbol(), field.getNumSymbol());
+                Optional<TextResult> optRslt = alphaNumService.makeAlphaNumPatternText(template);
+                if (optRslt.isPresent()) {
+                    value.append(quote(optRslt.get().getValue()));
+                } else {
+                    throw new RuntimeException("Error creating pattern");
+                }
+                break;
+            case "double" :
+                Optional<NumberValue> optDub = doubleService.doubleInRange(
+                        field.getRangeLowEnd(), field.getRangeHighEnd());
+                if (optDub.isPresent()) {
+                    double d = optDub.get().getNumber().doubleValue();
+                    String fmt = argHelper.makePrecisionPattern(field.getPrecision());
+                    DecimalFormat df = new DecimalFormat(fmt);
+                    value.append(df.format(d));
+                } else {
+                    throw new RuntimeException("Error creating pattern");
+                }
                 break;
         }
         return value.toString();
