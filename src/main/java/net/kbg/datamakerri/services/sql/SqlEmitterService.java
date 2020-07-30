@@ -24,13 +24,13 @@ import net.kbg.datamakerri.services.bool.BooleanService;
 import net.kbg.datamakerri.services.date.DateService;
 import net.kbg.datamakerri.services.number.AlphaNumService;
 import net.kbg.datamakerri.services.number.DoubleService;
+import net.kbg.datamakerri.services.number.LongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -66,7 +66,10 @@ public class SqlEmitterService {
     @Autowired
     private DoubleService doubleService;
 
-    public List<String> emit(Table table, Map<String, List<String>> fromLists) {
+    @Autowired
+    private LongService longService;
+
+    public List<String> emit(Table table) {
         List<String> sql = new LinkedList<>();
         if (table.getRows() < 1) {
             return sql;
@@ -74,9 +77,9 @@ public class SqlEmitterService {
         sql.add(makeInsertStatement(table));
         for (int b = 0; b < table.getRows(); ++b) {
             if (b == table.getRows() - 1) {
-                sql.add(generateRow(table.getStartRowNum() + b, table, fromLists) + ";");
+                sql.add(generateRow(table.getStartRowNum() + b, table) + ";");
             } else {
-                sql.add(generateRow(table.getStartRowNum() + b, table, fromLists) + ", ");
+                sql.add(generateRow(table.getStartRowNum() + b, table) + ", ");
             }
         }
         return sql;
@@ -92,19 +95,18 @@ public class SqlEmitterService {
         return sb.toString().replaceFirst(",", "");
     }
 
-    public String generateRow(long rowId, Table table, Map<String, List<String>> fromLists) {
+    public String generateRow(long rowId, Table table) {
         StringBuffer sb = new StringBuffer();
         sb.append("  VALUES (");
         for (Field field : table.getFields()) {
             sb.append(",")
-                    .append(generateFieldValue(rowId, field, fromLists));
+                    .append(generateFieldValue(rowId, field));
         }
         sb.append(")");
         return sb.toString().replaceFirst(",", "");
     }
 
-    public String generateFieldValue(long rowId, Field field,
-              Map<String, List<String>> fromLists) {
+    public String generateFieldValue(long rowId, Field field) {
 
         StringBuffer value = new StringBuffer();
 
@@ -214,9 +216,34 @@ public class SqlEmitterService {
                     DecimalFormat df = new DecimalFormat(fmt);
                     value.append(df.format(d));
                 } else {
-                    throw new RuntimeException("Error creating pattern");
+                    throw new RuntimeException("Error creating decimal value");
                 }
                 break;
+            case "long" :
+                Optional<NumberValue> optVal = longService.longFromRange(
+                        field.getRangeLowEnd(), field.getRangeHighEnd());
+                if (optVal.isPresent()) {
+                    value.append(optVal.get().getStrNum());
+                } else {
+                    throw new RuntimeException("Error creating number value");
+                }
+                break;
+            case "longfromlist" :
+                List<String> strlst = field.getFromLists().getOrDefault(
+                        field.getName(), new LinkedList<String>());
+                Optional<List<Long>> optlngs = argHelper.makeLongListFromStringList(strlst);
+                if (optlngs.isPresent()) {
+                    Optional<NumberValue> optlv = longService.longFromList(optlngs.get());
+                    if (optlv.isPresent()) {
+                        value.append(optlv.get().getStrNum());
+                    } else {
+                        throw new RuntimeException("Error creating number value");
+                    }
+                } else {
+                    throw new RuntimeException("Error creating number value");
+                }
+                break;
+
         }
         return value.toString();
     }

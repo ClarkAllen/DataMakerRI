@@ -30,6 +30,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -170,4 +171,43 @@ public class AlphArgHelperTest extends AbstractTestNGSpringContextTests {
     public void testMakePrecisionPatternBadArg() {
         String rslt = argHelper.makePrecisionPattern(0);
     }
+
+    @Test
+    public void testMakeLongListFromStringListHappyPath() {
+        List<String> strList = Arrays.asList(new String[]{"3","6","9","12","15"});
+        Optional<List<Long>> optLst = argHelper
+                .makeLongListFromStringList(strList);
+        assertTrue(optLst.isPresent());
+        List<Long> longs = optLst.get();
+        assertNotNull(longs);
+        assertTrue(longs.size() == 5);
+        for (long b : longs) {
+            assertTrue(b % 3 == 0);
+        }
+        System.out.println("converted List<Long> : " + longs.toString());
+    }
+
+    @Test
+    public void testMakeLongListFromStringListBadValue() {
+        List<String> strList = Arrays.asList(new String[]{"3","6","Nope","12","15"});
+        Optional<List<Long>> optLst = argHelper
+                .makeLongListFromStringList(strList);
+        assertTrue(optLst.isEmpty());
+    }
+
+    @Test
+    public void testMakeLongListFromStringListEmptyList() {
+        List<String> strList = new LinkedList<>();
+        Optional<List<Long>> optLst = argHelper
+                .makeLongListFromStringList(strList);
+        assertTrue(optLst.isEmpty());
+    }
+
+    @Test
+    public void testMakeLongListFromStringListNullList() {
+        Optional<List<Long>> optLst = argHelper
+                .makeLongListFromStringList(null);
+        assertTrue(optLst.isEmpty());
+    }
+
 }

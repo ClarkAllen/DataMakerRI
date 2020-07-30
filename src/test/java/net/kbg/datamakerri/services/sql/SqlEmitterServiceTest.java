@@ -24,10 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
@@ -40,7 +37,6 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void testEmitUuid() {
-        Map<String, List<String>> fromLists = new HashMap<>();
         List<Field> fields = new LinkedList<>();
         Field id = Field.builder().name("ID").dmSourceType("id").build();
         Field uuid = Field.builder()
@@ -55,7 +51,7 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
                 .startRowNum(1)
                 .fields(fields)
                 .build();
-        List<String> sql = sqlService.emit(table, fromLists);
+        List<String> sql = sqlService.emit(table);
         for (String s : sql) {
             System.out.println(s);
         }
@@ -68,7 +64,6 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void testEmitRandomText() {
-        Map<String, List<String>> fromLists = new HashMap<>();
         List<Field> fields = new LinkedList<>();
         Field id = Field.builder().name("ID").dmSourceType("id").build();
         Field rtext = Field.builder()
@@ -84,7 +79,7 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
                 .startRowNum(20)
                 .fields(fields)
                 .build();
-        List<String> sql = sqlService.emit(table, fromLists);
+        List<String> sql = sqlService.emit(table);
         for (String s : sql) {
             System.out.println(s);
         }
@@ -97,7 +92,6 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void testEmitFNameLName() {
-        Map<String, List<String>> fromLists = new HashMap<>();
         List<Field> fields = new LinkedList<>();
         String tableName = "MEMBERS";
         String field1Name = "FIRST_NAME";
@@ -122,7 +116,7 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
                 .startRowNum(20)
                 .fields(fields)
                 .build();
-        List<String> sql = sqlService.emit(table, fromLists);
+        List<String> sql = sqlService.emit(table);
         for (String s : sql) {
             System.out.println(s);
         }
@@ -140,7 +134,6 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void testEmitStreetCityState() {
-        Map<String, List<String>> fromLists = new HashMap<>();
         List<Field> fields = new LinkedList<>();
         String tableName = "ADDRESSES";
         String field1Name = "STREET";
@@ -169,7 +162,7 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
                 .startRowNum(20)
                 .fields(fields)
                 .build();
-        List<String> sql = sqlService.emit(table, fromLists);
+        List<String> sql = sqlService.emit(table);
         for (String s : sql) {
             System.out.println(s);
         }
@@ -188,7 +181,6 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void testEmitBooleanValues() {
-        Map<String, List<String>> fromLists = new HashMap<>();
         List<Field> fields = new LinkedList<>();
         String tableName = "TRUTHINESS";
         String field1Name = "TRUE_INT";
@@ -220,7 +212,7 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
                 .startRowNum(20)
                 .fields(fields)
                 .build();
-        List<String> sql = sqlService.emit(table, fromLists);
+        List<String> sql = sqlService.emit(table);
         for (String s : sql) {
             System.out.println(s);
         }
@@ -239,7 +231,6 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void testEmitDates() {
-        Map<String, List<String>> fromLists = new HashMap<>();
         List<Field> fields = new LinkedList<>();
         String tableName = "TIMELINESS";
         String field1Name = "MONTH_YEAR";
@@ -273,7 +264,7 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
                 .startRowNum(1)
                 .fields(fields)
                 .build();
-        List<String> sql = sqlService.emit(table, fromLists);
+        List<String> sql = sqlService.emit(table);
         for (String s : sql) {
             System.out.println(s);
         }
@@ -292,7 +283,6 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void testEmitPattern() {
-        Map<String, List<String>> fromLists = new HashMap<>();
         List<Field> fields = new LinkedList<>();
         String tableName = "PATTERNS";
         String field1Name = "LICENCE_TAG";
@@ -312,7 +302,7 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
                 .startRowNum(1)
                 .fields(fields)
                 .build();
-        List<String> sql = sqlService.emit(table, fromLists);
+        List<String> sql = sqlService.emit(table);
         for (String s : sql) {
             System.out.println(s);
         }
@@ -329,7 +319,6 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void testEmitDouble() {
-        Map<String, List<String>> fromLists = new HashMap<>();
         List<Field> fields = new LinkedList<>();
         String tableName = "DOUBLES";
         String field1Name = "PRICE";
@@ -358,7 +347,7 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
                 .startRowNum(1)
                 .fields(fields)
                 .build();
-        List<String> sql = sqlService.emit(table, fromLists);
+        List<String> sql = sqlService.emit(table);
         for (String s : sql) {
             System.out.println(s);
         }
@@ -370,6 +359,78 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
                         " (ID,"
                         + field1Name + ","
                         + field2Name + ")"));
+        assertTrue(sql.get(1).contains("VALUES (1,"));
+        assertTrue(sql.get(2).contains("VALUES (2,"));
+    }
+
+    @Test
+    public void testEmitLongFromRange() {
+        List<Field> fields = new LinkedList<>();
+        String tableName = "LONG_VALUES";
+        String field1Name = "SIZE_MM";
+        Field id = Field.builder().name("ID").dmSourceType("id").build();
+        Field size = Field.builder()
+                .name(field1Name)
+                .dmSourceType("long")
+                .rangeLowEnd(55)
+                .rangeHighEnd(170)
+                .build();
+        fields.add(id);
+        fields.add(size);
+        Table table = Table.builder()
+                .name(tableName)
+                .rows(5)
+                .startRowNum(1)
+                .fields(fields)
+                .build();
+        List<String> sql = sqlService.emit(table);
+        for (String s : sql) {
+            System.out.println(s);
+        }
+        assertNotNull(sql);
+        assertTrue(sql.size() == 6);
+        assertTrue(sql.get(0).contains(
+                "INSERT INTO "
+                        + tableName +
+                        " (ID,"
+                        + field1Name + ")"));
+        assertTrue(sql.get(1).contains("VALUES (1,"));
+        assertTrue(sql.get(2).contains("VALUES (2,"));
+    }
+
+    @Test
+    public void testEmitLongFromListHappyPath() {
+        List<String> strlst = Arrays.asList(new String[]{"2", "3", "5", "7", "11", "13"});
+        Map<String, List<String>> fromList = new HashMap<>();
+        List<Field> fields = new LinkedList<>();
+        String tableName = "LONG_VALUES";
+        String field1Name = "SIZE_OPT_1";
+        fromList.put(field1Name, strlst);
+        Field id = Field.builder().name("ID").dmSourceType("id").build();
+        Field size = Field.builder()
+                .name(field1Name)
+                .dmSourceType("longfromlist")
+                .fromLists(fromList)
+                .build();
+        fields.add(id);
+        fields.add(size);
+        Table table = Table.builder()
+                .name(tableName)
+                .rows(5)
+                .startRowNum(1)
+                .fields(fields)
+                .build();
+        List<String> sql = sqlService.emit(table);
+        for (String s : sql) {
+            System.out.println(s);
+        }
+        assertNotNull(sql);
+        assertTrue(sql.size() == 6);
+        assertTrue(sql.get(0).contains(
+                "INSERT INTO "
+                        + tableName +
+                        " (ID,"
+                        + field1Name + ")"));
         assertTrue(sql.get(1).contains("VALUES (1,"));
         assertTrue(sql.get(2).contains("VALUES (2,"));
     }

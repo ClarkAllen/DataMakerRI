@@ -18,6 +18,10 @@ package net.kbg.datamakerri.model;
 
 import lombok.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @AllArgsConstructor
 @Getter
 @Setter
@@ -41,6 +45,7 @@ public class Field {
     private String pattern;
     private String charSymbol;
     private String numSymbol;
+    private Map<String, List<String>> fromLists;
 
     public Field() {
         name = "";
@@ -59,5 +64,6 @@ public class Field {
         pattern = "";
         charSymbol = "";
         numSymbol = "";
+        fromLists = new HashMap<>();
     }
 }

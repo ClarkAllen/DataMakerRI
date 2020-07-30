@@ -18,6 +18,7 @@
 
 package net.kbg.datamakerri.helpers;
 
+import lombok.extern.slf4j.Slf4j;
 import net.kb.datamaker.alpha.Gender;
 import net.kb.datamaker.alpha.TextFactory;
 import net.kbg.datamakerri.model.MoneySymbol;
@@ -26,16 +27,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class AlphArgHelper {
-
-    private static final Logger log = LoggerFactory.getLogger(AlphArgHelper.class);
 
     @Autowired
     private Definitions definitions;
@@ -109,6 +106,23 @@ public class AlphArgHelper {
             sb.append("#");
         }
         return sb.toString();
+    }
+
+    public Optional<List<Long>> makeLongListFromStringList(List<String> nums) {
+        List<Long> lngs = new LinkedList<>();
+        try {
+            lngs = nums.stream()
+                    .map(n -> Long.parseLong(n))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return Optional.empty();
+        }
+
+        if (lngs.size() == 0) {
+            return Optional.empty();
+        }
+        return Optional.of(lngs);
     }
 
 }
