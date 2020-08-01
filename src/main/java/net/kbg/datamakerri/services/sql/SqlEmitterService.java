@@ -125,6 +125,16 @@ public class SqlEmitterService {
                     throw new RuntimeException("Error making random text");
                 }
                 break;
+            case "textfromlist" :
+                List<String> strLst = field.getFromLists().getOrDefault(
+                        field.getName(), new LinkedList<String>());
+                Optional<TextResult> optTxl = textService.selectFromList(strLst);
+                if (optTxl.isPresent()) {
+                    value.append(quote(optTxl.get().getValue()));
+                } else {
+                    throw new RuntimeException("Error creating text value from list");
+                }
+                break;
             case "fname" :
                 Optional<PersonName> opName = nameService.makeNameOfPerson(field.getGender(),
                         "FIRST_MIDDLE_LAST");

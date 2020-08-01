@@ -435,4 +435,41 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
         assertTrue(sql.get(2).contains("VALUES (2,"));
     }
 
+    @Test
+    public void testEmitTextFromListHappyPath() {
+        List<String> strList = Arrays.asList(new String[]{"ab", "cd", "ef", "gh", "ij"});
+        Map<String, List<String>> fromList = new HashMap<>();
+        List<Field> fields = new LinkedList<>();
+        String tableName = "TEXT_LIST_VALUES";
+        String field1Name = "SIZE_DOPS_1";
+        fromList.put(field1Name, strList);
+        Field id = Field.builder().name("ID").dmSourceType("id").build();
+        Field dops = Field.builder()
+                .name(field1Name)
+                .dmSourceType("textfromlist")
+                .fromLists(fromList)
+                .build();
+        fields.add(id);
+        fields.add(dops);
+        Table table = Table.builder()
+                .name(tableName)
+                .rows(5)
+                .startRowNum(1)
+                .fields(fields)
+                .build();
+        List<String> sql = sqlService.emit(table);
+        for (String s : sql) {
+            System.out.println(s);
+        }
+        assertNotNull(sql);
+        assertTrue(sql.size() == 6);
+        assertTrue(sql.get(0).contains(
+                "INSERT INTO "
+                        + tableName +
+                        " (ID,"
+                        + field1Name + ")"));
+        assertTrue(sql.get(1).contains("VALUES (1,"));
+        assertTrue(sql.get(2).contains("VALUES (2,"));
+    }
+
 }
