@@ -51,7 +51,7 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
                 .startRowNum(1)
                 .fields(fields)
                 .build();
-        List<String> sql = sqlService.emit(table);
+        List<String> sql = sqlService.emit(table).get();
         for (String s : sql) {
             System.out.println(s);
         }
@@ -79,7 +79,7 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
                 .startRowNum(20)
                 .fields(fields)
                 .build();
-        List<String> sql = sqlService.emit(table);
+        List<String> sql = sqlService.emit(table).get();
         for (String s : sql) {
             System.out.println(s);
         }
@@ -116,7 +116,7 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
                 .startRowNum(20)
                 .fields(fields)
                 .build();
-        List<String> sql = sqlService.emit(table);
+        List<String> sql = sqlService.emit(table).get();
         for (String s : sql) {
             System.out.println(s);
         }
@@ -162,7 +162,7 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
                 .startRowNum(20)
                 .fields(fields)
                 .build();
-        List<String> sql = sqlService.emit(table);
+        List<String> sql = sqlService.emit(table).get();
         for (String s : sql) {
             System.out.println(s);
         }
@@ -212,7 +212,7 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
                 .startRowNum(20)
                 .fields(fields)
                 .build();
-        List<String> sql = sqlService.emit(table);
+        List<String> sql = sqlService.emit(table).get();
         for (String s : sql) {
             System.out.println(s);
         }
@@ -264,7 +264,7 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
                 .startRowNum(1)
                 .fields(fields)
                 .build();
-        List<String> sql = sqlService.emit(table);
+        List<String> sql = sqlService.emit(table).get();
         for (String s : sql) {
             System.out.println(s);
         }
@@ -302,7 +302,7 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
                 .startRowNum(1)
                 .fields(fields)
                 .build();
-        List<String> sql = sqlService.emit(table);
+        List<String> sql = sqlService.emit(table).get();
         for (String s : sql) {
             System.out.println(s);
         }
@@ -347,7 +347,7 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
                 .startRowNum(1)
                 .fields(fields)
                 .build();
-        List<String> sql = sqlService.emit(table);
+        List<String> sql = sqlService.emit(table).get();
         for (String s : sql) {
             System.out.println(s);
         }
@@ -383,7 +383,7 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
                 .startRowNum(1)
                 .fields(fields)
                 .build();
-        List<String> sql = sqlService.emit(table);
+        List<String> sql = sqlService.emit(table).get();
         for (String s : sql) {
             System.out.println(s);
         }
@@ -420,7 +420,7 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
                 .startRowNum(1)
                 .fields(fields)
                 .build();
-        List<String> sql = sqlService.emit(table);
+        List<String> sql = sqlService.emit(table).get();
         for (String s : sql) {
             System.out.println(s);
         }
@@ -457,7 +457,7 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
                 .startRowNum(1)
                 .fields(fields)
                 .build();
-        List<String> sql = sqlService.emit(table);
+        List<String> sql = sqlService.emit(table).get();
         for (String s : sql) {
             System.out.println(s);
         }

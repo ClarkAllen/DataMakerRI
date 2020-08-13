@@ -40,4 +40,27 @@ public class Table {
         fields = new LinkedList<>();
     }
 
+    public List<String> validate() {
+        List<String> errors = new LinkedList<>();
+        if (name.isBlank()) {
+            errors.add("Table name is required");
+        }
+        else if (rows < 1) {
+            errors.add("Table rows must be greater than zero");
+        }
+        else if (fields.size() < 1) {
+            errors.add("The table has no fields");
+        }
+        else if (startRowNum < 1) {
+            errors.add("Table startRowNum must be greater than zero");
+        }
+        for (int k = 0; k < fields.size(); ++k) {
+            List<String> errs = fields.get(k).validate(k);
+            if (errs.size() > 0) {
+                errors.addAll(errs);
+            }
+        }
+        return errors;
+    }
+
 }

@@ -16,7 +16,10 @@
 
 package net.kbg.datamakerri.services.sql;
 
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import net.kbg.datamakerri.helpers.AlphArgHelper;
+import net.kbg.datamakerri.helpers.Definitions;
 import net.kbg.datamakerri.input.PatternTemplate;
 import net.kbg.datamakerri.model.*;
 import net.kbg.datamakerri.services.alpha.*;
@@ -33,6 +36,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class SqlEmitterService {
 
@@ -69,20 +73,25 @@ public class SqlEmitterService {
     @Autowired
     private LongService longService;
 
-    public List<String> emit(Table table) {
+    public Optional<List<String>> emit(Table table) {
         List<String> sql = new LinkedList<>();
-        if (table.getRows() < 1) {
-            return sql;
-        }
-        sql.add(makeInsertStatement(table));
-        for (int b = 0; b < table.getRows(); ++b) {
-            if (b == table.getRows() - 1) {
-                sql.add(generateRow(table.getStartRowNum() + b, table) + ";");
-            } else {
-                sql.add(generateRow(table.getStartRowNum() + b, table) + ", ");
+        try {
+            if (table.getRows() < 1) {
+                return Optional.empty();
             }
+            sql.add(makeInsertStatement(table));
+            for (int b = 0; b < table.getRows(); ++b) {
+                if (b == table.getRows() - 1) {
+                    sql.add(generateRow(table.getStartRowNum() + b, table) + ";");
+                } else {
+                    sql.add(generateRow(table.getStartRowNum() + b, table) + ", ");
+                }
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return Optional.empty();
         }
-        return sql;
+        return Optional.of(sql);
     }
 
     public String makeInsertStatement(Table table) {
@@ -111,13 +120,13 @@ public class SqlEmitterService {
         StringBuffer value = new StringBuffer();
 
         switch (field.getDmSourceType().toLowerCase()) {
-            case "id" :
+            case Definitions.ID :
                 value.append("" + rowId);
                 break;
-            case "uuid" :
+            case Definitions.UUID :
                 value.append(quote(textService.makeUuid().getValue()));
                 break;
-            case "rtext" :
+            case Definitions.RTEXT :
                 Optional<TextResult> optTxt = textService.makeText(field.getLength());
                 if (optTxt.isPresent()) {
                     value.append(quote(optTxt.get().getValue()));
@@ -125,7 +134,7 @@ public class SqlEmitterService {
                     throw new RuntimeException("Error making random text");
                 }
                 break;
-            case "textfromlist" :
+            case Definitions.TEXT_FROM_LIST :
                 List<String> strLst = field.getFromLists().getOrDefault(
                         field.getName(), new LinkedList<String>());
                 Optional<TextResult> optTxl = textService.selectFromList(strLst);
@@ -135,7 +144,7 @@ public class SqlEmitterService {
                     throw new RuntimeException("Error creating text value from list");
                 }
                 break;
-            case "fname" :
+            case Definitions.FNAME :
                 Optional<PersonName> opName = nameService.makeNameOfPerson(field.getGender(),
                         "FIRST_MIDDLE_LAST");
                 if (opName.isPresent()) {
@@ -144,7 +153,7 @@ public class SqlEmitterService {
                     throw new RuntimeException("Error making person name");
                 }
                 break;
-            case "lname" :
+            case Definitions.LNAME :
                 Optional<PersonName> optName = nameService.makeNameOfPerson(field.getGender(),
                         "FIRST_MIDDLE_LAST");
                 if (optName.isPresent()) {
@@ -153,19 +162,19 @@ public class SqlEmitterService {
                     throw new RuntimeException("Error making person name");
                 }
                 break;
-            case "street" :
+            case Definitions.STREET :
                 Street street = streetService.makeStreet();
                 value.append(quote(street.getStreet()));
                 break;
-            case "city" :
+            case Definitions.CITY :
                 City city = cityService.makeCity();
                 value.append(quote(city.getName()));
                 break;
-            case "state" :
+            case Definitions.STATE :
                 State state = stateService.makeState();
                 value.append(quote(state.getName()));
                 break;
-            case "bool" :
+            case Definitions.BOOL :
                 BooleanValue val = booleanService.makeRandomBoolean();
                 switch(field.getDatabaseType()) {
                     case "int" :
@@ -181,7 +190,7 @@ public class SqlEmitterService {
                         throw new RuntimeException("Bad state for boolean creation");
                 }
                 break;
-            case "datemonyr" :
+            case Definitions.DATE_MON_YR :
                 Optional<DateValue> optDt = dateService.makeDateInMonthYear(
                         field.getMonth(), field.getYear());
                 if (optDt.isPresent()) {
@@ -190,7 +199,7 @@ public class SqlEmitterService {
                     throw new RuntimeException("Error creating date in month/year");
                 }
                 break;
-            case "dateinyr" :
+            case Definitions.DATE_IN_YR :
                 Optional<DateValue> optDtyr = dateService.makeDateInYear(
                         field.getYear());
                 if (optDtyr.isPresent()) {
@@ -199,7 +208,7 @@ public class SqlEmitterService {
                     throw new RuntimeException("Error creating date in year");
                 }
                 break;
-            case "datebetwyrs" :
+            case Definitions.DATE_BETW_YRS :
                 Optional<DateValue> optDtrg = dateService.makeDateInYearRange(
                         field.getYearLowEnd(), field.getYearHighEnd());
                 if (optDtrg.isPresent()) {
@@ -208,7 +217,7 @@ public class SqlEmitterService {
                     throw new RuntimeException("Error creating date in year range");
                 }
                 break;
-            case "pattern" :
+            case Definitions.PATTERN :
                 PatternTemplate template = new PatternTemplate(field.getPattern(), field.getCharSymbol(), field.getNumSymbol());
                 Optional<TextResult> optRslt = alphaNumService.makeAlphaNumPatternText(template);
                 if (optRslt.isPresent()) {
@@ -217,7 +226,7 @@ public class SqlEmitterService {
                     throw new RuntimeException("Error creating pattern");
                 }
                 break;
-            case "double" :
+            case Definitions.DOUBLE :
                 Optional<NumberValue> optDub = doubleService.doubleInRange(
                         field.getRangeLowEnd(), field.getRangeHighEnd());
                 if (optDub.isPresent()) {
@@ -229,7 +238,7 @@ public class SqlEmitterService {
                     throw new RuntimeException("Error creating decimal value");
                 }
                 break;
-            case "long" :
+            case Definitions.LONG :
                 Optional<NumberValue> optVal = longService.longFromRange(
                         field.getRangeLowEnd(), field.getRangeHighEnd());
                 if (optVal.isPresent()) {
@@ -238,7 +247,7 @@ public class SqlEmitterService {
                     throw new RuntimeException("Error creating number value");
                 }
                 break;
-            case "longfromlist" :
+            case Definitions.LONG_FROM_LIST :
                 List<String> strlst = field.getFromLists().getOrDefault(
                         field.getName(), new LinkedList<String>());
                 Optional<List<Long>> optlngs = argHelper.makeLongListFromStringList(strlst);
