@@ -154,7 +154,7 @@ public class SqlEmitterService {
                 }
                 break;
             case Definitions.LNAME :
-                Optional<PersonName> optName = nameService.makeNameOfPerson(field.getGender(),
+                Optional<PersonName> optName = nameService.makeNameOfPerson("R",
                         "FIRST_MIDDLE_LAST");
                 if (optName.isPresent()) {
                     value.append(quote(optName.get().getLast()));

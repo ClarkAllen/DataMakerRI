@@ -89,6 +89,7 @@ public class Field {
                         errors.add("The field length must be greater than one for a random text field : " + idx);
                     }
                     break;
+                case Definitions.LONG_FROM_LIST:
                 case Definitions.TEXT_FROM_LIST :
                     if ( ! fromLists.containsKey(name) ) {
                         errors.add("The fromLists array needs a key/value pair of string/string[] " +
@@ -98,9 +99,80 @@ public class Field {
                         errors.add("The string list for " + name + " is too small : " + idx);
                     }
                     break;
+                case Definitions.FNAME :
+                    if (gender.isBlank() || !validGender()) {
+                        errors.add("The gender given is not valid; expecting R, M, or F : " + idx);
+                    }
+                    break;
+                case Definitions.BOOL:
+                    if (databaseType.isBlank() || !validBoolDatabaseType()) {
+                        errors.add("The database type given is not valid; expecting int, boolean, or string : " + idx);
+                    }
+                    break;
+                case Definitions.DATE_MON_YR:
+                    if ( !validMonth() || !validYear() ) {
+                        errors.add("Month or year argument was not valid for date creation : " + idx);
+                    }
+                    break;
+                case Definitions.DATE_IN_YR:
+                    if ( !validYear() ) {
+                        errors.add("The year argument was not valid for date creation : " + idx);
+                    }
+                    break;
+                case Definitions.DATE_BETW_YRS:
+                    if ( !validYearRange() ) {
+                        errors.add("The year range parameters were not valid : " + idx);
+                    }
+                    break;
+                case Definitions.PATTERN:
+                    if ( !patternValid() ) {
+                        errors.add("Patterned string require a valid pattern, charSymbol, and numSymbol : " + idx);
+                    }
+                    break;
+                case Definitions.DOUBLE:
+                case Definitions.LONG:
+                    if (rangeLowEnd >= rangeHighEnd) {
+                        errors.add("rangeLowEnd and rangeHighEnd arguments are not valid; expecting rangeLowEnd < rangeHighEnd : " + idx);
+                    }
+                    break;
                 default : // do nothing
             }
         }
         return errors;
     }
+
+    private boolean validGender() {
+        return gender.toUpperCase().equals("R") ||
+                gender.toUpperCase().equals("M") ||
+                gender.toUpperCase().equals("F");
+    }
+
+    private boolean validBoolDatabaseType() {
+        return databaseType.equals("int") ||
+                databaseType.equals("boolean") ||
+                databaseType.equals("string");
+    }
+
+    private boolean validMonth() {
+        return month > 0 && month < 13;
+    }
+
+    private boolean validYear() {
+        return year > 0 && year < 4_001;
+    }
+
+    private boolean validYearRange() {
+        return yearLowEnd > 0 &&
+                yearLowEnd < 4_001 &&
+                yearHighEnd > 0 &&
+                yearHighEnd < 4_001 &&
+                yearLowEnd < yearHighEnd;
+    }
+
+    private boolean patternValid() {
+        return pattern.trim().length() > 0 &&
+                charSymbol.trim().length() == 1 &&
+                numSymbol.trim().length() == 1;
+    }
+
 }

@@ -16,11 +16,10 @@
 
 package net.kbg.datamakerri.services.bool;
 
+import lombok.extern.slf4j.Slf4j;
 import net.kb.datamaker.bool.BooleanFactory;
 import net.kbg.datamakerri.helpers.AlphArgHelper;
 import net.kbg.datamakerri.model.BooleanValue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +27,6 @@ import java.util.Optional;
 
 @Service
 public class BooleanService {
-
-    private static final Logger log = LoggerFactory.getLogger(BooleanService.class);
 
     @Autowired
     AlphArgHelper argHelper;
