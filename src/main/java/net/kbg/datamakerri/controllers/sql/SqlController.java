@@ -38,6 +38,12 @@ public class SqlController {
 
     @PutMapping("/table")
     public ResponseEntity insertToTable(@RequestBody Table table) {
+        List<String> errors = table.validate();
+        if (errors.size() > 0) {
+            return ResponseEntity
+                    .status(400)
+                    .body(errors);
+        }
         Optional<List<String>> optSql = sqlService.emit(table);
         if (optSql.isEmpty()) {
             return ResponseEntity

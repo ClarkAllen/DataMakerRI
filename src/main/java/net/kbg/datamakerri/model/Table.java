@@ -42,22 +42,27 @@ public class Table {
 
     public List<String> validate() {
         List<String> errors = new LinkedList<>();
-        if (name.isBlank()) {
-            errors.add("Table name is required");
+        if (name == null || name.isBlank()) {
+            errors.add("Error: Table name is required");
         }
-        else if (rows < 1) {
-            errors.add("Table rows must be greater than zero");
+        if (rows < 1) {
+            errors.add("Error: Table rows must be greater than zero");
         }
-        else if (fields.size() < 1) {
-            errors.add("The table has no fields");
+        else if (rows > 2_000) {
+            errors.add("Error: Table should have less than 2_000 rows");
         }
-        else if (startRowNum < 1) {
-            errors.add("Table startRowNum must be greater than zero");
+        if (startRowNum < 1) {
+            errors.add("Error: Table startRowNum must be greater than zero");
         }
-        for (int k = 0; k < fields.size(); ++k) {
-            List<String> errs = fields.get(k).validate(k);
-            if (errs.size() > 0) {
-                errors.addAll(errs);
+        if (fields == null || fields.size() < 1) {
+            errors.add("Error: The table has no fields");
+        }
+        else {
+            for (int k = 0; k < fields.size(); ++k) {
+                List<String> errs = fields.get(k).validate(k);
+                if (errs.size() > 0) {
+                    errors.addAll(errs);
+                }
             }
         }
         return errors;
