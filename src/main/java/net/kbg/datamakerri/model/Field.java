@@ -76,7 +76,7 @@ public class Field {
         if (name == null || name.isBlank()) {
             errors.add("Error: Field name is required : " + idx);
         }
-        else if (dmSourceType == null || dmSourceType.isBlank()) {
+        if (dmSourceType == null || dmSourceType.isBlank()) {
             errors.add("Error: dmSourceType is required : " + idx);
         }
         else if ( ! sourceTypes.contains(dmSourceType) ) {
@@ -105,12 +105,12 @@ public class Field {
                     }
                     break;
                 case Definitions.BOOL:
-                    if (databaseType.isBlank() || !validBoolDatabaseType()) {
+                    if ( ! validBoolDatabaseType()) {
                         errors.add("Error: The database type given is not valid; expecting int, boolean, or string : " + idx);
                     }
                     break;
                 case Definitions.DATE_MON_YR:
-                    if ( ! validMonth() || !validYear() ) {
+                    if ( ! validMonth() || ! validYear() ) {
                         errors.add("Error: Month or year argument was not valid for date creation : " + idx);
                     }
                     break;
@@ -144,9 +144,9 @@ public class Field {
     private boolean validGender() {
         return  gender != null &&
                 ! gender.isBlank() &&
-                (gender.toUpperCase().equals("R") ||
-                gender.toUpperCase().equals("M") ||
-                gender.toUpperCase().equals("F"));
+                (gender.toUpperCase().equalsIgnoreCase("R") ||
+                gender.toUpperCase().equalsIgnoreCase("M") ||
+                gender.toUpperCase().equalsIgnoreCase("F"));
     }
 
     private boolean validBoolDatabaseType() {
