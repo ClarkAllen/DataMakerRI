@@ -337,7 +337,7 @@ public class TableTest {
 
     private Field makeLongField() {
         return Field.builder()
-                .name("DOUBLE")
+                .name("LONG")
                 .dmSourceType(Definitions.LONG)
                 .rangeLowEnd(-20)
                 .rangeHighEnd(20)

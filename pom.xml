@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>net.kbg</groupId>
 	<artifactId>datamakerri</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>datamakerri</name>
 	<description>A RESTful interface for datamakerapi</description>
 
