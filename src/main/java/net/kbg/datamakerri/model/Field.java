@@ -130,6 +130,10 @@ public class Field {
                     }
                     break;
                 case Definitions.DOUBLE:
+                    if (precision < 1) {
+                        errors.add("Error: doubles require a precision argument : " + idx);
+                    }
+                    // No break here.  Test the ranges the same as Longs.
                 case Definitions.LONG:
                     if (rangeLowEnd >= rangeHighEnd) {
                         errors.add("Error: rangeLowEnd and rangeHighEnd arguments are not valid; expecting rangeLowEnd < rangeHighEnd : " + idx);

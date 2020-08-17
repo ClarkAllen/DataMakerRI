@@ -331,6 +331,7 @@ public class TableTest {
                 .dmSourceType(Definitions.DOUBLE)
                 .rangeLowEnd(-7)
                 .rangeHighEnd(7)
+                .precision(3)
                 .build();
     }
 

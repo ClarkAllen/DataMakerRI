@@ -493,11 +493,26 @@ public class FieldTest {
     }
 
     @Test
-    public void testDoubleInvalidArgs() {
+    public void testDoubleInvalidRangeArgs() {
         Field f = Field.builder()
                 .name("SAME_LOW_AND_HIGH_END_DOUBLE")
                 .dmSourceType(Definitions.DOUBLE)
                 .rangeLowEnd(7)
+                .rangeHighEnd(7)
+                .precision(3)
+                .build();
+        List<String> errors = f.validate(28);
+        assertNotNull(errors);
+        System.out.println("Field Errors : " + errors);
+        assertEquals(errors.size(), 1);
+    }
+
+    @Test
+    public void testDoubleMissingPrecisionArg() {
+        Field f = Field.builder()
+                .name("SAME_LOW_AND_HIGH_END_DOUBLE")
+                .dmSourceType(Definitions.DOUBLE)
+                .rangeLowEnd(2)
                 .rangeHighEnd(7)
                 .build();
         List<String> errors = f.validate(28);
