@@ -16,8 +16,6 @@
 
 package net.kbg.datamakerri.controllers.alpha;
 
-import net.kb.datamaker.alpha.Gender;
-import net.kbg.datamakerri.helpers.AlphArgHelper;
 import net.kbg.datamakerri.model.ErrorMsg;
 import net.kbg.datamakerri.model.GenderMod;
 import net.kbg.datamakerri.services.alpha.GenderService;

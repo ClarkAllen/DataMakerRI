@@ -16,6 +16,7 @@
 
 package net.kbg.datamakerri.controllers.number;
 
+import lombok.extern.slf4j.Slf4j;
 import net.kbg.datamakerri.model.ErrorMsg;
 import net.kbg.datamakerri.model.NumberValue;
 import net.kbg.datamakerri.services.number.DoubleService;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequestMapping("/v1/num/double")
 public class DoubleController {
@@ -41,6 +43,7 @@ public class DoubleController {
         Optional<NumberValue> optRslt = doubleService.doubleInRange(lowEnd, highEnd);
 
         if (optRslt.isEmpty()) {
+            log.error("Returning 400 : Probably bad arguments.");
             ErrorMsg errorMsg = new ErrorMsg(
                     "400",
                     "Check your parameters.  The low end must be less than the high end.");

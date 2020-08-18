@@ -16,6 +16,7 @@
 
 package net.kbg.datamakerri.controllers.number;
 
+import lombok.extern.slf4j.Slf4j;
 import net.kbg.datamakerri.input.PatternTemplate;
 import net.kbg.datamakerri.model.ErrorMsg;
 import net.kbg.datamakerri.model.TextResult;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequestMapping("/v1/num")
 public class AlphaNumController {
@@ -42,6 +44,7 @@ public class AlphaNumController {
         Optional<TextResult> rslt = alphaNumService.makeAlphaNumPatternText(pattern);
 
         if (rslt.isEmpty()) {
+            log.error("Returning 400 : Bad arguments.");
             ErrorMsg errorMsg = new ErrorMsg("400",
                     "Bad argument.  " +
                             "The charSymbol and numSymbol must both have length = 1 " +

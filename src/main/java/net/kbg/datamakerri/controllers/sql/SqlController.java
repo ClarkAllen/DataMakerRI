@@ -16,6 +16,7 @@
 
 package net.kbg.datamakerri.controllers.sql;
 
+import lombok.extern.slf4j.Slf4j;
 import net.kbg.datamakerri.model.Table;
 import net.kbg.datamakerri.services.sql.SqlEmitterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequestMapping("/v1/sql")
 public class SqlController {
@@ -40,6 +42,7 @@ public class SqlController {
     public ResponseEntity insertToTable(@RequestBody Table table) {
         List<String> errors = table.validate();
         if (errors.size() > 0) {
+            log.error("Validation errors : " + errors.size());
             return ResponseEntity
                     .status(400)
                     .body(errors);

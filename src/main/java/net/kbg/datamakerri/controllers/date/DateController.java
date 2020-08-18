@@ -17,7 +17,7 @@
 package net.kbg.datamakerri.controllers.date;
 
 
-import net.kb.datamaker.dates.DateFactory;
+import lombok.extern.slf4j.Slf4j;
 import net.kbg.datamakerri.model.DateValue;
 import net.kbg.datamakerri.model.ErrorMsg;
 import net.kbg.datamakerri.services.date.DateService;
@@ -29,9 +29,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
 import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequestMapping("/v1/date")
 public class DateController {
@@ -43,6 +43,7 @@ public class DateController {
     public ResponseEntity makeDateInYear(@RequestParam int year) {
         Optional<DateValue> optVal = dateService.makeDateInYear(year);
         if (optVal.isEmpty()) {
+            log.error("Returning 400 : Bad arguments.");
             ErrorMsg errorMsg = new ErrorMsg("400", "The year must be between 1 and 4,000.");
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -58,6 +59,7 @@ public class DateController {
     public ResponseEntity makeDateInMonthYear(@RequestParam int month, @RequestParam int year) {
         Optional<DateValue> optVal = dateService.makeDateInMonthYear(month, year);
         if (optVal.isEmpty()) {
+            log.error("Returning 400 : Probably bad arguments.");
             ErrorMsg errorMsg = new ErrorMsg("400",
                     "The month must be between 1 and 12 and the " +
                             "year must be between 1 and 4,000.");
@@ -75,6 +77,7 @@ public class DateController {
     public ResponseEntity makeDateInYearRange(@RequestParam int lowyear, @RequestParam int highyear) {
         Optional<DateValue> optVal = dateService.makeDateInYearRange(lowyear, highyear);
         if (optVal.isEmpty()) {
+            log.error("Returning 400 : Probably bad arguments.");
             ErrorMsg errorMsg = new ErrorMsg("400",
                     "The year must be between 1 and 4,000.");
             return ResponseEntity
@@ -86,6 +89,5 @@ public class DateController {
                 .status(HttpStatus.OK)
                 .body(optVal.get());
     }
-
 
 }

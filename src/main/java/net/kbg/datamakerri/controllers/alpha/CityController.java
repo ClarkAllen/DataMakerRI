@@ -16,7 +16,6 @@
 
 package net.kbg.datamakerri.controllers.alpha;
 
-import net.kb.datamaker.alpha.CityFactory;
 import net.kbg.datamakerri.model.City;
 import net.kbg.datamakerri.services.alpha.CityService;
 import org.springframework.beans.factory.annotation.Autowired;

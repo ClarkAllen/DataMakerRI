@@ -16,7 +16,6 @@
 
 package net.kbg.datamakerri.controllers.alpha;
 
-import net.kb.datamaker.alpha.Directionals;
 import net.kbg.datamakerri.model.Directional;
 import net.kbg.datamakerri.services.alpha.DirectionalService;
 import org.springframework.beans.factory.annotation.Autowired;

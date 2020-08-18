@@ -16,7 +16,7 @@
 
 package net.kbg.datamakerri.controllers.bool;
 
-import net.kb.datamaker.bool.BooleanFactory;
+import lombok.extern.slf4j.Slf4j;
 import net.kbg.datamakerri.model.BooleanValue;
 import net.kbg.datamakerri.model.ErrorMsg;
 import net.kbg.datamakerri.services.bool.BooleanService;
@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequestMapping("/v1/bool")
 public class BooleanController {
@@ -49,6 +50,7 @@ public class BooleanController {
     public ResponseEntity makeIntBoolean(@RequestParam int trueValue, @RequestParam int falseValue) {
         Optional<BooleanValue> rslt = booleanService.makeIntBoolean(trueValue, falseValue);
         if (rslt.isEmpty()) {
+            log.error("Returning 400 : Probably bad arguments.");
             ErrorMsg errorMsg = new ErrorMsg("400",
                     "Please check your arguments.");
             return ResponseEntity
@@ -65,6 +67,7 @@ public class BooleanController {
     public ResponseEntity makeStringBoolean(@RequestParam String trueValue, @RequestParam String falseValue) {
         Optional<BooleanValue> rslt = booleanService.makeStringBoolean(trueValue, falseValue);
         if (rslt.isEmpty()) {
+            log.error("Returning 400 : Probably bad arguments.");
             ErrorMsg errorMsg = new ErrorMsg("400",
                     "Please check your arguments.");
             return ResponseEntity
