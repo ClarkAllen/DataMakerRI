@@ -8,7 +8,8 @@ or with  : mvn spring-boot:run  --debug
 The Dockerized version of this application is on 
 Docker Hub : https://hub.docker.com/repository/docker/clarkallen/datamakerri.
 
-You can test the endpoints with the related project DataMakerIT 
+You can test the endpoints with OpenAPI on http://host:port/data/swagger-ui.html
+and also with the related project DataMakerIT 
 which is also hosted on GitHub : https://github.com/ClarkAllen/DataMakerIT.
 
 Some example calls to the RESTful API :
