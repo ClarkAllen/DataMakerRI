@@ -102,32 +102,36 @@ greater than zero.
 **dmSourceType textfromlist**
 Sometimes you may want to have control over the items selected from 
 for the return value.  Some examples might be dog breeds, product names,
-company names, etc... .  This source type allows you select randomly 
-from a list that you supply.  The list must have two or more elements.
+company names, etc... .  This dmSourceType allows you select randomly 
+from a list that you supply.  The list must have two or more string elements.
 
-**Important** : There is a fromLists element in the fields definition that maps a
-field name to the list the field is populated from.  The list name matches 
-the field name that it populates.  This structure allows multiple fields to be 
-populated from lists that you control.
+Here is how it looks in the field definition :
 
-In the example below, this field is populated from a list with the same name :
-
-    "fields": {
-        ... ,
-        "name": "SOME_FIELD_NAME",
-        "dmSourceType": "textfromlist",
-        "fromLists": {
-            "SOME_FIELD_NAME": [
+    "fields": [
+        {
+            "name": "SOME_FIELD_NAME",
+            "dmSourceType": "textfromlist",
+            "itemList": [
                 "Hammer",
                 "Screwdriver",
                 "Drill",
                 "Saw"
             ]
-        },
+        }
         ...
-    }
 
-**dmSourceType **
+**dmSourceType fname**
+To select the first name of a person you will need to specify a gender.
+The gender specification must be one of R (random), M (male), or F (female).
+
+    "fields": [
+            {
+                "name": "SOME_FIELD_NAME",
+                "dmSourceType": "fname",
+                "gender": "R"
+            }
+            ...
+    
 
 **dmSourceType **
 
