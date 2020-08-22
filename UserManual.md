@@ -72,7 +72,7 @@ This is an incrementing integer field.  The first value is the value of startRow
 the table definition and always increments by one with each new row.  The name of a 
 field is always distinct from its dmSourceType.  In the example above I gave the key
 a name of "ID" and a dmSourceType of "id".  Don't be confused by the name that 
-resembles the the dmSourceType; the field name is just a legal name in your database
+resembles the dmSourceType; the field name is just a legal name in your database
 definition.
 
 **dmSourceType uuid**
@@ -132,33 +132,185 @@ The gender specification must be one of R (random), M (male), or F (female).
             }
             ...
     
+**dmSourceType lname**
+Last names are not typically gender specific, so gender is not a required 
+argument.
 
-**dmSourceType **
+    "fields": [
+        {
+            "name": "SOME_FIELD_NAME",
+            "dmSourceType": "lname"
+        }
+        ...
 
-**dmSourceType **
+**dmSourceType street**
+Nothing special is required for this field.
 
-**dmSourceType **
+    "fields": [
+        {
+            "name": "SOME_FIELD_NAME",
+            "dmSourceType": "street"
+        }
+        ...
 
-**dmSourceType **
+**dmSourceType city**
+Nothing special is required for this field.
 
-**dmSourceType **
+    "fields": [
+        {
+            "name": "SOME_FIELD_NAME",
+            "dmSourceType": "city"
+        }
+        ...
 
-**dmSourceType **
+**dmSourceType state**
+Nothing special is required for this field.
 
-**dmSourceType **
+    "fields": [
+        {
+            "name": "SOME_FIELD_NAME",
+            "dmSourceType": "state"
+        }
+        ...
 
-**dmSourceType **
+**dmSourceType bool**
+The return value might be handled in three different ways; as an integer,
+as a string, or as a boolean.  For that reason you need to specify the 
+database type so the data are returned in a useful way.  The database type
+argument must be one of int (returns 1 or 0), boolean (returns true or false), 
+or string (returns 'True' or 'False').
 
-**dmSourceType **
+    "fields": [
+        {
+            "name": "SOME_FIELD_NAME",
+            "dmSourceType": "bool",
+            "databaseType": "int"
+        }
+        ...
 
-**dmSourceType **
+**dmSourceType datemonyr**
+To get a random date in some month and year you must specify the month
+and year that you want to constrain the selection by.  Both month and
+year will be numeric arguments.  The month is a number from one to twelve.
+The year is an argument from 1 to 4,000.
 
-**dmSourceType **
+    "fields": [
+        {
+            "name": "SOME_FIELD_NAME",
+            "dmSourceType": "datemonyr",
+            "month": 7,
+            "year": 2018
+        }
+        ...
 
-**dmSourceType **
+**dmSourceType dateinyr**
+Specify a numeric year between 1 and 4000 to generate the random date 
+value in that year.
 
-**dmSourceType **
+    "fields": [
+        {
+            "name": "SOME_FIELD_NAME",
+            "dmSourceType": "dateinyr",
+            "year": 2019
+        }
+        ...
 
-**dmSourceType **
+**dmSourceType datebetwyrs**
+To generate a random year between two years (including the boundary years),
+specify yearLowEnd and yearHighEnd values as numbers between 1 and 4000.
+
+    "fields": [
+        {
+            "name": "SOME_FIELD_NAME",
+            "dmSourceType": "datebetwyrs",
+            "yearLowEnd": 2005,
+            "yearHighEnd": 2015
+        }
+        ...
+
+**dmSourceType pattern**
+The pattern source type allows the user to generate a string that follows 
+a pattern.  The pattern can contain constants, variable character places,
+and variable numeric places.  Serial numbers often look this way.
+A serial number might begin with "SN : ", have a mix of 4 character or 
+numeric values, a dash and a mix of 8 more character and numeric values : 
+
+'SN : K589-7a295mZ6'.
+
+You must pass a pattern string and two characters that will stand in as 
+variable places in your pattern.  See the example below and the explanation 
+that follows.
+
+    "fields": [
+        {
+            "name": "SOME_FIELD_NAME",
+            "dmSourceType": "pattern",
+            "pattern": "SN : K589-nannnaan",
+            "charSymbol": "a",
+            "numSymbol": "n"
+        }
+        ...
+
+- The characters in the "SN : K589-" portion of the string are rendered 
+as constants.
+- All the "a" characters in the pattern are replaced with a random character
+because our charSymbol specified "a" as a pattern symbol.
+- All the "n" characters in the pattern are replaced with a random integer
+because our numSymbol specified "n" as a pattern symbol.
+
+**dmSourceType double**
+To get a random decimal number you need to specify the long integer range that 
+will constrain the number, and the number of decimal places to show; 
+the precision.
+
+    "fields": [
+        {
+            "name": "SOME_FIELD_NAME",
+            "dmSourceType": "double",
+            "rangeLowEnd": 50,
+            "rangeHighEnd": 350,
+            "precision": 3
+        }
+        ...
+
+**dmSourceType long**
+To get a long integer you need to specify the upper and lower limits.
+
+    "fields": [
+        {
+            "name": "SOME_FIELD_NAME",
+            "dmSourceType": "long",
+            "rangeLowEnd": -300,
+            "rangeHighEnd": 300
+        }
+        ...
+
+**dmSourceType longfromlist**
+If you want to control the long integers discretely, you can provide a 
+string list of the numbers that will be selected from.  Of course, the 
+numbers have to successfully parse to long integers for this to work.
+
+    "fields": [
+        {
+            "name": "SOME_FIELD_NAME",
+            "dmSourceType": "longfromlist",
+            "itemList": [
+                "0",
+                "10",
+                "100",
+                "1000",
+                "10000"
+            ]
+        }
+        ...
+
+<br />
+
+#### Non-SQL Generating REST Endpoints
+
+Other endpoints offered by the application provide JSON responses for
+small data requests such as a randomly generated address, a string pattern,
+a person's name, etc.  The calling convention for these endpoints is given
+below.
 
 
