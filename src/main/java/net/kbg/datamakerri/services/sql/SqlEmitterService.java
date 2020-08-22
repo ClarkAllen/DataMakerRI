@@ -135,8 +135,7 @@ public class SqlEmitterService {
                 }
                 break;
             case Definitions.TEXT_FROM_LIST :
-                List<String> strLst = field.getFromLists().getOrDefault(
-                        field.getName(), new LinkedList<String>());
+                List<String> strLst = field.getItemList();
                 Optional<TextResult> optTxl = textService.selectFromList(strLst);
                 if (optTxl.isPresent()) {
                     value.append(quote(optTxl.get().getValue()));
@@ -248,8 +247,7 @@ public class SqlEmitterService {
                 }
                 break;
             case Definitions.LONG_FROM_LIST :
-                List<String> strlst = field.getFromLists().getOrDefault(
-                        field.getName(), new LinkedList<String>());
+                List<String> strlst = field.getItemList();
                 Optional<List<Long>> optlngs = argHelper.makeLongListFromStringList(strlst);
                 if (optlngs.isPresent()) {
                     Optional<NumberValue> optlv = longService.longFromList(optlngs.get());

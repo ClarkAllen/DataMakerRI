@@ -236,12 +236,10 @@ public class TableTest {
 
     private Field makeTextFromListField() {
         List<String> list = Arrays.asList(new String[]{"aa","bb","cc","dd"});
-        Map<String, List<String>> fromLists = new HashMap<>();
-        fromLists.put("TEXT_FROM_LIST", list);
         return Field.builder()
                 .name("TEXT_FROM_LIST")
                 .dmSourceType(Definitions.TEXT_FROM_LIST)
-                .fromLists(fromLists)
+                .itemList(list)
                 .build();
     }
 
@@ -346,12 +344,10 @@ public class TableTest {
 
     private Field makeLongFromListField() {
         List<String> list = Arrays.asList(new String[]{"911","538","196","212"});
-        Map<String, List<String>> fromLists = new HashMap<>();
-        fromLists.put("LONG_FROM_LIST", list);
         return Field.builder()
                 .name("LONG_FROM_LIST")
                 .dmSourceType(Definitions.LONG_FROM_LIST)
-                .fromLists(fromLists)
+                .itemList(list)
                 .build();
     }
 

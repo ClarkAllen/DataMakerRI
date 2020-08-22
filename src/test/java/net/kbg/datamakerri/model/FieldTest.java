@@ -95,30 +95,12 @@ public class FieldTest {
     }
 
     @Test
-    public void testLongListFieldNameIsBad() {
-        List<String> longs = Arrays.asList(new String[]{"1","2","3"});
-        Map<String, List<String>> fromLists = new HashMap<>();
-        fromLists.put("does not match field name", longs);
-        Field f = Field.builder()
-                .name("BAD_LONG_LIST_NAME")
-                .dmSourceType(Definitions.LONG_FROM_LIST)
-                .fromLists(fromLists)
-                .build();
-        List<String> errors = f.validate(5);
-        assertNotNull(errors);
-        System.out.println("Field Errors : " + errors);
-        assertEquals(errors.size(), 1);
-    }
-
-    @Test
     public void testLongListTooSmall() {
         List<String> longs = Arrays.asList(new String[]{"1"});
-        Map<String, List<String>> fromLists = new HashMap<>();
-        fromLists.put("LONG_LIST_TOO_SMALL", longs);
         Field f = Field.builder()
                 .name("LONG_LIST_TOO_SMALL")
                 .dmSourceType(Definitions.LONG_FROM_LIST)
-                .fromLists(fromLists)
+                .itemList(longs)
                 .build();
         List<String> errors = f.validate(6);
         assertNotNull(errors);
@@ -139,30 +121,12 @@ public class FieldTest {
     }
 
     @Test
-    public void testTextListFieldNameIsBad() {
-        List<String> longs = Arrays.asList(new String[]{"1","2","3"});
-        Map<String, List<String>> fromLists = new HashMap<>();
-        fromLists.put("does not match field name", longs);
-        Field f = Field.builder()
-                .name("BAD_TEXT_LIST_NAME")
-                .dmSourceType(Definitions.TEXT_FROM_LIST)
-                .fromLists(fromLists)
-                .build();
-        List<String> errors = f.validate(8);
-        assertNotNull(errors);
-        System.out.println("Field Errors : " + errors);
-        assertEquals(errors.size(), 1);
-    }
-
-    @Test
     public void testTextListTooSmall() {
         List<String> longs = Arrays.asList(new String[]{"1"});
-        Map<String, List<String>> fromLists = new HashMap<>();
-        fromLists.put("TEXT_LIST_TOO_SMALL", longs);
         Field f = Field.builder()
                 .name("TEXT_LIST_TOO_SMALL")
                 .dmSourceType(Definitions.TEXT_FROM_LIST)
-                .fromLists(fromLists)
+                .itemList(longs)
                 .build();
         List<String> errors = f.validate(9);
         assertNotNull(errors);

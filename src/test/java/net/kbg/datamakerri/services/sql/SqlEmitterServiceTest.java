@@ -401,16 +401,14 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
     @Test
     public void testEmitLongFromListHappyPath() {
         List<String> strlst = Arrays.asList(new String[]{"2", "3", "5", "7", "11", "13"});
-        Map<String, List<String>> fromList = new HashMap<>();
         List<Field> fields = new LinkedList<>();
         String tableName = "LONG_VALUES";
         String field1Name = "SIZE_OPT_1";
-        fromList.put(field1Name, strlst);
         Field id = Field.builder().name("ID").dmSourceType("id").build();
         Field size = Field.builder()
                 .name(field1Name)
                 .dmSourceType("longfromlist")
-                .fromLists(fromList)
+                .itemList(strlst)
                 .build();
         fields.add(id);
         fields.add(size);
@@ -438,16 +436,14 @@ public class SqlEmitterServiceTest extends AbstractTestNGSpringContextTests {
     @Test
     public void testEmitTextFromListHappyPath() {
         List<String> strList = Arrays.asList(new String[]{"ab", "cd", "ef", "gh", "ij"});
-        Map<String, List<String>> fromList = new HashMap<>();
         List<Field> fields = new LinkedList<>();
         String tableName = "TEXT_LIST_VALUES";
         String field1Name = "SIZE_DOPS_1";
-        fromList.put(field1Name, strList);
         Field id = Field.builder().name("ID").dmSourceType("id").build();
         Field dops = Field.builder()
                 .name(field1Name)
                 .dmSourceType("textfromlist")
-                .fromLists(fromList)
+                .itemList(strList)
                 .build();
         fields.add(id);
         fields.add(dops);

@@ -36,7 +36,7 @@ public class TextService {
     }
 
     public Optional<TextResult> selectFromList(List<String> inputList) {
-        if (inputList.size() < 2) {
+        if (inputList == null || inputList.size() < 2) {
             log.error("Input list size is too small.");
             return Optional.empty();
         }

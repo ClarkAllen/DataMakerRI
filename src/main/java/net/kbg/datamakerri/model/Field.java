@@ -19,10 +19,7 @@ package net.kbg.datamakerri.model;
 import lombok.*;
 import net.kbg.datamakerri.helpers.Definitions;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @AllArgsConstructor
 @Getter
@@ -47,7 +44,7 @@ public class Field {
     private String pattern;
     private String charSymbol;
     private String numSymbol;
-    private Map<String, List<String>> fromLists;
+    private List<String> itemList;
 
     public Field() {
         name = "";
@@ -66,7 +63,7 @@ public class Field {
         pattern = "";
         charSymbol = "";
         numSymbol = "";
-        fromLists = new HashMap<>();
+        itemList = new ArrayList<>();
     }
 
     public List<String> validate(int idx) {
@@ -91,12 +88,11 @@ public class Field {
                     break;
                 case Definitions.LONG_FROM_LIST:
                 case Definitions.TEXT_FROM_LIST :
-                    if ( fromLists == null || ! fromLists.containsKey(name) ) {
-                        errors.add("Error: The fromLists array needs a key/value pair of string/string[] " +
-                                "and the key must be the same  as the field name : " + idx);
+                    if ( itemList == null ) {
+                        errors.add("Error: The itemList array for " + name + " needs to be populated " + idx);
                     }
-                    else if (fromLists.get(name).size() < 2) {
-                        errors.add("Error: The string list for " + name + " is too small : " + idx);
+                    else if (itemList.size() < 2) {
+                        errors.add("Error: The itemList array for " + name + " is too small : " + idx);
                     }
                     break;
                 case Definitions.FNAME :
